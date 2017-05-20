@@ -2,19 +2,19 @@
 
 
 module inicializacion(
-    input wire clk,reset,escribe,lee,
+    input wire clk,reset,escribe,lee,crono,
     input wire Inicio,
     output reg[7:0] data_out,
     output reg [7:0] address
     );
-localparam [11:0] limit = 12'd36; //tiempo en el que la dirección se mantiene
-    reg [11:0] contador=0;
-    reg [4:0] c_dir=0;
+localparam [11:0] limit = 12'h04a; //tiempo en el que la dirección se mantiene
+reg [11:0] contador=0;
+reg [4:0] c_dir=0;
 
 
 always @(posedge clk)
 begin
-    if((Inicio|reset) && !escribe && !lee)begin
+    if((Inicio|reset) && !escribe && !lee && !crono)begin
     contador<=contador + 1'b1;
       if(contador==limit)
       begin
@@ -33,7 +33,7 @@ begin
 
 
 always @*begin
-  if((Inicio|reset) && !escribe && !lee)
+  if((Inicio|reset) && !escribe && !lee && !crono)
     begin
     case(c_dir)
         4'h1:
