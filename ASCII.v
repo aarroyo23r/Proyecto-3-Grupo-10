@@ -6,6 +6,7 @@ module ASCII(
 
 always @*
     case(key_code)
+    8'h00:ascii_code = 8'h00; //reset
     8'h45:ascii_code = 8'h30; //0
     8'h16:ascii_code = 8'h31; //1
     8'h1e:ascii_code = 8'h32; //2
