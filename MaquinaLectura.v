@@ -4,7 +4,7 @@ module MaquinaLectura(
     output reg [7:0] address
     );
 localparam [11:0] limit = 12'h04a; //tiempo en el que la dirección se mantiene
-reg [11:0] contador=0;
+reg [11:0] contador=1;
 reg reset;
 reg [3:0] c_dir=0;
   
