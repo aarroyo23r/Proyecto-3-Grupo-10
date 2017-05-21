@@ -2,8 +2,7 @@
 
 
 module inicializacion(
-    input wire clk,reset,escribe,lee,crono,
-    input wire Inicio,
+    input wire clk,reset,escribe,crono,inicio,
     output reg[7:0] data_out,
     output reg [7:0] address
     );
@@ -14,7 +13,7 @@ reg [4:0] c_dir=0;
 
 always @(posedge clk)
 begin
-    if((Inicio|reset) && !escribe && !lee && !crono)begin
+    if((!crono && !escribe && inicio)|reset)begin
     contador<=contador + 1'b1;
       if(contador==limit)
       begin
@@ -25,16 +24,14 @@ begin
       end
       end
     end
-        if(!Inicio && !reset)begin
+    else begin
         contador<=0;
-        c_dir<=0;
-    end
+        c_dir<=0;end
     end
 
 
 always @*begin
-  if((Inicio|reset) && !escribe && !lee && !crono)
-    begin
+  if((!crono && !escribe && inicio)|reset)begin
     case(c_dir)
         4'h1:
             begin
