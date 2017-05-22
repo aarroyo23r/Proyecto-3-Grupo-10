@@ -98,12 +98,14 @@ always @*begin
             address<=8'h43;
             data_out<=8'h00;
             end
-         default:
+         default: begin
          address<=8'hZZ;
+         data_out<=8'hZZ;end
     endcase
     end
     else
     address<=8'hZZ;
+    data_out<=8'hZZ;
     end
 
 endmodule

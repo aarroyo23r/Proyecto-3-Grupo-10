@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 module Protocolo_rtc(
-    input wire clk,reset, //Señal clk de 100Mhz
+    input wire clk, //Señal clk de 100Mhz
     input wire [7:0]address, //Dirección del dato
     input wire [7:0]DATA_WRITE, //Dato modificado +1 o -1
     input wire IndicadorMaquina, //Bit indicador de maquina general
