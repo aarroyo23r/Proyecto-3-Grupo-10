@@ -69,6 +69,8 @@ always @*begin
     address=address_lectura;end
     else if(!reset && !inicio && escribe && !crono)begin
     address=address_escritura;end
+    else  if(!reset && !inicio && !escribe && crono)begin
+    address=address_escritura;end
     else begin
     address=8'hZZ;end
 end
