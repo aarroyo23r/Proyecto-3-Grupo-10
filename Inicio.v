@@ -7,7 +7,7 @@ module inicializacion(
     output reg [7:0] address
     );
 localparam [11:0] limit = 12'h04a; //tiempo en el que la dirección se mantiene
-reg [11:0] contador=0;
+reg [11:0] contador=1;
 reg [4:0] c_dir=0;
 
 
@@ -17,7 +17,7 @@ begin
     contador<=contador + 1'b1;
       if(contador==limit)
       begin
-      contador<=0;
+      contador<=1;
       c_dir<=c_dir +1'b1;
         if(c_dir==4'hd)begin
         c_dir<=0;
@@ -25,7 +25,7 @@ begin
       end
     end
     else begin
-        contador<=0;
+        contador<=1;
         c_dir<=0;end
     end
 
@@ -51,44 +51,55 @@ always @*begin
          4'h4:
             begin
             address<=8'h22;
+            data_out<=8'h00;
             end
          4'h5:
             begin
             address<=8'h23;
+            data_out<=8'h00;
             end
          4'h6:
             begin
             address<=8'h24;
+            data_out<=8'h00;
             end
          4'h7:
             begin
             address<=8'h25;
+            data_out<=8'h00;
             end
          4'h8:
             begin
             address<=8'h26;
+            data_out<=8'h00;
             end
          4'h9:
             begin
             address<=8'h27;
+            data_out<=8'h00;
             end
          4'ha:
             begin
             address<=8'h28;
+            data_out<=8'h00;
             end
          4'hb:
             begin
-            address<=8'h31;
+            address<=8'h41;
+            data_out<=8'h00;
             end
          4'hc:
             begin
-            address<=8'h32;
+            address<=8'h42;
+            data_out<=8'h00;
             end
          4'hd:
             begin
-            address<=8'h33;
+            address<=8'h43;
+            data_out<=8'h00;
             end
-         default:address<=8'hZZ;
+         default:
+         address<=8'hZZ;
     endcase
     end
     else

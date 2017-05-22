@@ -3,10 +3,18 @@
 module GeneradorFunciones(     //Definicion entradas y salidas
     input wire clk,  //variable que reinicia los contadores, se reinicia con un 1
     input wire IndicadorMaquina,  //Señal que indica acción que se esta realizando // En cero ejecuta señales Write y en 1 señales read
-    output reg ChipSelect,Read,Write,AoD //Señales de entrada del RTC
+    output wire ChipSelect1,Read1,Write1,AoD1, //Señales de entrada del RTC
+    output wire [6:0]contador21
     );
        
 reg [6:0] contador2=1,contador=1;
+reg ChipSelect=1,Read=1,Write=1,AoD;
+
+assign contador21 = contador;
+assign ChipSelect1 =ChipSelect;
+assign Read1 = Read;
+assign AoD1 = AoD;
+assign Write1=Write;
 
 assign contador1=contador2;           
 always @(posedge clk)
@@ -17,8 +25,8 @@ always @(posedge clk)
         contador2<=6'd01;
         end
    end
-   
-   
+
+ 
    always @(posedge clk)
       begin
          contador<=contador +6'd1; //contador para modulo cuenta el doble del anterior
@@ -94,5 +102,6 @@ begin
         Read<=1;
         end            
     end
-end   
+end 
+  
 endmodule
