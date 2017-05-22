@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 module GeneradorFunciones(     //Definicion entradas y salidas
-    input wire clk,  //variable que reinicia los contadores, se reinicia con un 1
+    input wire clk,reset,  //variable que reinicia los contadores, se reinicia con un 1
     input wire IndicadorMaquina,  //Señal que indica acción que se esta realizando // En cero ejecuta señales Write y en 1 señales read
     output wire ChipSelect1,Read1,Write1,AoD1, //Señales de entrada del RTC
     output wire [6:0]contador21
@@ -16,14 +16,16 @@ assign Read1 = Read;
 assign AoD1 = AoD;
 assign Write1=Write;
 
-assign contador1=contador2;           
+
+
 always @(posedge clk)
    begin
       contador2<=contador2 +6'd1; //contador para general señal
-      if(contador2==6'd37)
-        begin
-        contador2<=6'd01;
-        end
+        if(contador2==6'd37)
+            begin
+            contador2<=6'd01;
+            end
+      
    end
 
  

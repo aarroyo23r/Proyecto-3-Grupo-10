@@ -105,7 +105,6 @@ always @*begin
     end
     else
     address<=8'hZZ;
-    data_out<=8'hZZ;
     end
 
 endmodule
