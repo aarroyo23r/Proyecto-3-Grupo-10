@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 module GeneradorFunciones(     //Definicion entradas y salidas
-    input wire clk,reset,  //variable que reinicia los contadores, se reinicia con un 1
+    input wire clk,                 
     input wire IndicadorMaquina,  //Señal que indica acción que se esta realizando // En cero ejecuta señales Write y en 1 señales read
     output wire ChipSelect1,Read1,Write1,AoD1, //Señales de entrada del RTC
     output wire [6:0]contador21
