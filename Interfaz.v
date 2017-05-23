@@ -23,13 +23,13 @@
 module Interfaz(
     input wire clk,reset,resetSync,
     input wire instrucciones,ProgramarCrono,ring,//Señales de control
-   input wire [7:0] cursor,//Direccion del cursor
+ //  input wire [7:0] cursor,//Direccion del cursor
     input wire Escribir,//Control escritura
     output wire  [11:0] rgbO,//Salida de color
     output wire hsync,vsync,//Sincronizacion de la VGA
     output wire video_on,
     //Datos  de entrada
-    input wire [7:0] datos0,datos1,datos2,datos3,datos4,datos5,datos6,datos7,datos8,
+   input wire [7:0] datos0,datos1,datos2,datos3,datos4,datos5,datos6,datos7,datos8,
    datos9,datos10
 
     //output wire [9:0] pixelx, pixely
@@ -49,13 +49,14 @@ wire [9:0] pixelx, pixely;
 //wire video_on;
 /*
     wire [7:0] cursor=00;
+
     wire [7:0] datos0=06;
     wire [7:0]datos1=07;
     wire [7:0]datos2=23;
     wire [7:0]datos3=03;
     wire [7:0]datos4=05;
     wire [7:0]datos5=04;
-    wire [7:0]datos6=09;
+    wire [7:0]datos6=00;
     wire [7:0]datos7=01;
     wire [7:0]datos8=08;
    wire [7:0] datos9=03;
@@ -231,7 +232,7 @@ ImpresionDatos ImpresionDatos_unit
      .numeroSemanaU(numeroSemanaU),.fechaD(fechaD),.mesD(mesD),.anoD(anoD),.diaSemanaD(diaSemanaD),
      .numeroSemanaD(numeroSemanaD),.graficosO(graficos),
      .SegundosUT(SegundosUT),.minutosUT(minutosUT),.horasUT(horasUT),
-     .SegundosDT(SegundosDT),.minutosDT(minutosDT),.horasDT(horasDT),.instrucciones(instrucciones),.cursor(cursor)
+     .SegundosDT(SegundosDT),.minutosDT(minutosDT),.horasDT(horasDT),.cursor(cursor)
      ,.Escribir(Escribir),.ProgramarCrono(ProgramarCrono)
     );
 
@@ -275,21 +276,20 @@ default: color = 12'h111;
 endcase
 
 
-
 //Mux Salida color
 
-always @*
+always @(posedge clk)
 
 
 if (graficos)begin
-colorMux=datoMemoria;
+colorMux<=datoMemoria;
 end
 /*
 else if (ring==1  && (pixely >= 10'd473) && (pixely<= 10'd480) ) begin
 colorMux= colorAlarma; end //Cambio de color
 */
 else begin
-colorMux=color;
+colorMux<=color;
 end
 
 
