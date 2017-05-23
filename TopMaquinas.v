@@ -7,6 +7,7 @@ module TopMaquinas(
     input wire inicio,escribe,crono,reset1,
     input wire push_arriba,push_abajo,push_izquierda,push_derecha,
     inout wire [7:0] DATA_ADDRESS,
+    output wire [7:0]data_mod,
     output wire [7:0] data_vga,
     output wire ChipSelect,Read,Write,AoD //Señales de entrada del RTC
     );
@@ -17,7 +18,9 @@ wire [6:0] contador2;
 reg IndicadorMaquina;
 reg reset;
 
-wire [7:0] datos0,datos1,datos2, datos3,datos4, datos5,datos6, datos7, datos8,datos9,datos10;
+
+wire[7:0] datos0,datos1,datos2, datos3,datos4, datos5,datos6, datos7,datos8,datos9,datos10;
+
 
 //módulos instanciados-----------------------------------------------------------------------------------------
 
@@ -30,13 +33,13 @@ GeneradorFunciones generador_unit (.clk(clk),.IndicadorMaquina(IndicadorMaquina)
 Protocolo_rtc rtc_unit(.clk(clk),.address(address),.DATA_WRITE(data),.IndicadorMaquina(IndicadorMaquina),.Read(Read),.Write(Write),.AoD(AoD),
                        .DATA_ADDRESS(DATA_ADDRESS),.data_vga(data_vga),.contador_todo(contador2));
 
-Registros register_unit (.clk(clk),.AoD(AoD),.data_vga(data_vga),.address(address),.datos0(datos0),.datos1(datos1),.datos2(datos2),.datos3(datos3),.datos4(datos4),.datos5(datos5),
-                         .datos6(datos6),.datos7(datos7),.datos8(datos8),.datos9(datos9),.datos10(datos10));
-                       
-MaquinaEscritura Escritura_unit(.clk(clk),.inicio(inicio),.reset(reset),.crono(crono),.escribe(escribe),.suma(push_arriba),.resta(push_abajo),
-                                .izquierda(push_izquierda),.derecha(push_derecha),.address(address_escritura));//.segundos(datos0),.minutos(datos1),.horas(datos2),.date(datos3),.num_semana(datos4),.mes(datos5),
-                                //.ano(datos6),.dia_sem(datos7),
-                         
+MaquinaEscritura Escritura_unit(.clk(clk),.inicio(inicio),.reset(reset),.crono(crono),.escribe(escribe),.suma(push_arriba),.resta(push_abajo),.data_mod(data_mod),
+                                .izquierda(push_izquierda),.derecha(push_derecha),.address(address_escritura),.segundos(datos0),.minutos(datos1),.horas(datos2),.date(datos3),.num_semana(datos4),.mes(datos5),
+                                .ano(datos6),.dia_sem(datos7),.IndicadorMaquina(IndicadorMaquina),.segundos_cr(datos8),.minutos_cr(datos9),.horas_cr(datos10));
+
+Registros Reg_unit(.clk(clk),.AoD(AoD),.data_vga(data_vga),.address(address),.data_0(datos0),.data_1(datos1),.data_2(datos2),.data_3(datos3),.data_4(datos4),
+                                .data_5(datos5),.data_6(datos6),.data_7(datos7),.data_8(datos8),.data_9(datos9),.data_10(datos10));
+
 //Lógica para evitar reset en momento incorrecto--------------------------------------------------------
 always@(posedge clk)begin
     if(reset1 && contador2==7'h4a)begin
@@ -47,7 +50,7 @@ always@(posedge clk)begin
     end
 end
 
-//MUX PARA DATOS--------------------------------------------------------------------------------------------
+//MUX PARA DATOS a Programar--------------------------------------------------------------------------------------------
 always @*begin
     if(inicio && !escribe && !crono && !reset)begin   
     data=data_inicio;end
@@ -86,6 +89,9 @@ always @*begin
  IndicadorMaquina=0;
  end
  else if (!inicio && !reset && escribe && !crono)begin
+ IndicadorMaquina=0;
+ end
+ else if(!inicio && !reset && !escribe && crono)begin
  IndicadorMaquina=0;
  end
  else begin

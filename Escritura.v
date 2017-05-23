@@ -1,14 +1,18 @@
 `timescale 1ns / 1ps
 module MaquinaEscritura(
     input wire inicio,reset,crono,escribe,
-    input wire clk,
+    input wire clk,IndicadorMaquina,
     input wire suma,resta,izquierda,derecha,
-    //input wire [7:0]segundos,minutos,horas,date,num_semana,mes,ano,dia_sem,
-    output reg [7:0] address    
+    input wire [7:0]segundos,minutos,horas,date,num_semana,mes,ano,dia_sem,
+    input wire [7:0]segundos_cr,minutos_cr,horas_cr,
+    output reg [7:0] address,
+    output reg [7:0]data_mod    
     );
  //Variables----------------------------------------------------------------  
 reg [3:0] s_next=4'h1;reg [3:0] s_actual;
 reg suma_reg;reg resta_reg;reg[4:0]registro=0; 
+reg [7:0]segundos_reg,minutos_reg,horas_reg,date_reg,num_semana_reg,mes_reg,ano_reg,dia_sem_reg;
+reg [7:0]segundos_cr_reg,minutos_cr_reg,horas_cr_reg;
 
 //declaración de estados---------------------------------------------------_
 localparam [3:0] s0 = 4'h1, //am-pm---24hrs
@@ -35,6 +39,9 @@ always @(posedge clk,posedge reset)begin
     else
         s_actual <=s_next;
 end
+
+
+    
 
 //Máquina de Estados----------------------------------------------------------
 always@*begin
@@ -382,10 +389,10 @@ case(s_actual)
     
 endcase
 end
-
-else if(!inicio && !reset && crono && !escribe)begin              //Programación del cronómetro
+//Programación del cronómetro-----------------------------------------------------------------------------
+else if(!inicio && !reset && crono && !escribe)begin              
     case(s_actual)
-      s9:begin
+      s9:begin                                                  //segundos crono
       if(!suma && !resta && !izquierda && !derecha)begin
                   registro=5'd9;
                   address=8'h41;
@@ -393,14 +400,14 @@ else if(!inicio && !reset && crono && !escribe)begin              //Programació
                   resta_reg=0;
                   s_next=s9;
                   end
-      else if(suma && !resta && !izquierda && !derecha)begin
+      else if(suma && !resta && !izquierda && !derecha)begin  
                   registro=5'd9;
                   address=8'h41;
                   suma_reg=1;
                   resta_reg=0;
                   s_next=s9;
                   end
-      else if(!suma && resta && !izquierda && !derecha)begin
+      else if(!suma && resta && !izquierda && !derecha)begin  
                   registro=5'd9;
                   address=8'h41;
                   resta_reg=1;
@@ -422,7 +429,7 @@ else if(!inicio && !reset && crono && !escribe)begin              //Programació
                   s_next=s10;
                   end  
       end
-      s10:begin
+      s10:begin                                             // minutos crono
       if(!suma && !resta && !izquierda && !derecha)begin
                       registro=5'ha;
                       address=8'h42;
@@ -459,7 +466,7 @@ else if(!inicio && !reset && crono && !escribe)begin              //Programació
                       s_next=s11;
                       end
            end
-           s11:begin
+           s11:begin                                            //horas crono
            if(!suma && !resta && !izquierda && !derecha)begin
                       registro=5'hb;
                       address=8'h43;
@@ -505,7 +512,160 @@ suma_reg=suma_reg;
 resta_reg=resta_reg;
 s_next=s0;
 end
+end
 
+//LOGICA SUMADOR Y RESTADO-----------------------------------------------------------------------------------
+
+always @(posedge clk) begin
+//SUMADOR
+if(!IndicadorMaquina)begin
+
+if(suma_reg && !resta_reg) begin
+
+    if (registro==5'd1)begin
+    segundos_reg<=segundos_reg + 1;end
+    
+    else if (registro==5'd2)begin
+    minutos_reg<=minutos_reg + 1;end
+    
+    else if(registro==5'd3)begin
+    horas_reg<=horas_reg+1;end
+
+    else if(registro==5'd4)begin
+    date_reg<=date_reg+1;end
+    
+    else if(registro==5'd5)begin
+    mes_reg<=mes_reg+1;end
+    
+    else if(registro==5'd6)begin
+    ano_reg<=ano_reg+1;end
+   
+    else if(registro==5'd7)begin
+    dia_sem_reg<=dia_sem_reg+1;end
+    
+    else if(registro==5'd8)begin
+    num_semana_reg<=num_semana_reg+1;end
+    
+    else if(registro==5'd9)begin
+    segundos_cr_reg<=segundos_cr_reg +1;end
+    
+    else if(registro==5'ha)begin
+    minutos_cr_reg<=minutos_cr_reg+1;end
+    
+    else if(registro==5'hb)begin
+    horas_cr_reg<=horas_reg+1;end
+    
+    end
+   
+//Restador
+    else if(!suma_reg && resta_reg ) begin
+
+    if (registro==5'd1)begin
+    segundos_reg<=segundos_reg - 8'd1;end
+
+    else if (registro==5'd2)begin
+    minutos_reg<=minutos_reg - 8'd1;
+    end
+
+    else if(registro==5'd3)begin
+    horas_reg<=horas_reg-8'd1;
+    end
+
+    else if(registro ==5'h4)begin
+    date_reg<=date_reg-8'd1;end
+    
+    else if(registro==5'd5)begin
+    num_semana_reg<=num_semana_reg-1;end
+    
+    else if(registro==5'd6)begin
+    mes_reg<=mes_reg-1;end
+    
+    else if(registro==5'd7)begin
+    ano_reg<=ano_reg-1;end
+    
+    else if(registro==5'd8)begin
+    dia_sem_reg<=dia_sem_reg-1;end
+    
+    else if(registro==5'd9)begin
+    segundos_cr_reg<=segundos_cr_reg +1;end
+    
+    else if(registro==5'ha)begin
+    minutos_cr_reg<=minutos_cr_reg;end
+    
+    else if(registro==5'hb)begin
+    horas_cr_reg<=horas_cr_reg;end
+     
+    end
+
+    else begin
+    minutos_reg<=minutos_reg;
+    segundos_reg<=segundos_reg;
+    horas_reg<=horas_reg;
+    date_reg<=date_reg;
+    num_semana_reg<=num_semana_reg;
+    mes_reg<=mes_reg;
+    ano_reg<=ano_reg;
+    dia_sem_reg<=dia_sem_reg;
+    segundos_cr_reg<=segundos_cr_reg;
+    minutos_cr_reg<=minutos_cr_reg;
+    horas_cr_reg<=horas_cr_reg;
+    end
+    
+end
+
+else if(IndicadorMaquina)begin
+  segundos_reg<=segundos;
+  minutos_reg<=minutos;
+  horas_reg<=horas;
+  date_reg<=date;
+  num_semana_reg<=num_semana;
+  mes_reg<=mes;
+  ano_reg<=ano;
+  dia_sem_reg<=dia_sem;
+  segundos_cr_reg<=segundos_cr;
+  minutos_cr_reg<=minutos_cr;
+  horas_cr_reg<=horas_cr;
+  end
+end
+
+
+//LOGICA DE SALIDA DEL DATO MODIFICADO------------------------------------------------------------
+always@*
+  begin
+  if(address==8'h21)begin
+  data_mod<=segundos_reg;
+    end
+  else if(address==8'h22)begin
+    data_mod<=minutos_reg;
+    end
+  else if(address==8'h23)begin
+    data_mod<=horas_reg;
+    end
+  else if(address==8'h24)begin
+    data_mod<=date_reg;
+    end
+    
+   else if(address==8'h25)begin
+    data_mod<=mes_reg;
+    end
+   else if(address==8'h26)begin
+    data_mod<=ano_reg;
+    end
+   else if(address==8'h27)begin
+    data_mod<=num_semana_reg;
+    end
+   else if(address==8'h28)begin
+    data_mod<=dia_sem_reg;
+    end
+   else if(address==8'h41)begin
+    data_mod<=segundos_cr_reg;end
+    
+   else if(address==8'h42)begin
+    data_mod<=minutos_cr_reg;end
+   
+   else if(address==8'h43)begin
+    data_mod<=horas_cr_reg;end
+                  
 end
 
 endmodule
