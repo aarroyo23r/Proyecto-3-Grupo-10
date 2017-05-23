@@ -13,6 +13,7 @@ reg [3:0] s_next=4'h1;reg [3:0] s_actual;
 reg suma_reg;reg resta_reg;reg[4:0]registro=0; 
 reg [7:0]segundos_reg,minutos_reg,horas_reg,date_reg,num_semana_reg,mes_reg,ano_reg,dia_sem_reg;
 reg [7:0]segundos_cr_reg,minutos_cr_reg,horas_cr_reg;
+reg [7:0]data_directo=0;
 
 //declaración de estados---------------------------------------------------_
 localparam [3:0] s0 = 4'h1, //am-pm---24hrs
@@ -58,15 +59,13 @@ case(s_actual)
     else if(suma && !resta && !izquierda && !derecha)begin
                 registro=5'd0;
                 address=8'h00;
-                suma_reg=1;
-                resta_reg=0;
+                data_directo=8'h10;
                 s_next=s0;
                  end
     else if(!suma && resta && !izquierda && !derecha)begin
                 registro=5'd0;
                 address=8'h00;
-                resta_reg=1;
-                suma_reg=0;
+                data_directo=8'h00;
                 s_next=s0;
                 end
     
@@ -660,11 +659,16 @@ always@*
    else if(address==8'h41)begin
     data_mod<=segundos_cr_reg;end
     
-   else if(address==8'h42)begin
+   else if(address==8'h42) begin
     data_mod<=minutos_cr_reg;end
    
-   else if(address==8'h43)begin
+   else if(address==8'h43 )begin
     data_mod<=horas_cr_reg;end
+    
+   else if(address==8'h00)begin
+   data_mod<=data_directo;end 
+
+//falta asignar datos fantasma que son leidos por el controlador de la VGA durante la lectura
                   
 end
 

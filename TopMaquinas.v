@@ -56,6 +56,10 @@ always @*begin
     data=data_inicio;end
     else if(reset && !inicio && !escribe && !crono) begin
     data=data_inicio;end
+    else if(!reset && !inicio && escribe && !crono)begin
+    data=data_mod;end
+    else if(!reset && !inicio && !escribe && crono)begin
+    data=data_mod;end
     else begin
     data=8'hZZ;end
 end
