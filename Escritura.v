@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 module MaquinaEscritura(
     input wire inicio,reset,crono,escribe,
-    input wire clk,IndicadorMaquina,
+    input wire clk,IndicadorMaquina,cr_activo,
     input wire suma,resta,izquierda,derecha,
     input wire [7:0]segundos,minutos,horas,date,num_semana,mes,ano,dia_sem,
     input wire [7:0]segundos_cr,minutos_cr,horas_cr,
@@ -14,6 +14,7 @@ reg suma_reg;reg resta_reg;reg[4:0]registro=0;
 reg [7:0]segundos_reg,minutos_reg,horas_reg,date_reg,num_semana_reg,mes_reg,ano_reg,dia_sem_reg;
 reg [7:0]segundos_cr_reg,minutos_cr_reg,horas_cr_reg;
 reg [7:0]data_directo=0;
+reg [7:0]data_activo;
 
 //declaración de estados---------------------------------------------------_
 localparam [3:0] s0 = 4'h1, //am-pm---24hrs
@@ -27,7 +28,8 @@ localparam [3:0] s0 = 4'h1, //am-pm---24hrs
                  s8 = 4'h9, //#de semana
                  s9 = 4'ha, //segundos cronometro
                  s10 = 4'hb,//minutos cronometro
-                 s11 = 4'hc; //horas cronómetro
+                 s11 = 4'hc, //horas cronómetro
+                 s12 = 4'hd;
                 
 //Lógica de reset y de estado siguiente-------------------------------------
 always @(posedge clk,posedge reset)begin
@@ -36,6 +38,9 @@ always @(posedge clk,posedge reset)begin
     end
     else if(crono && s_actual<4'ha)begin
         s_actual<=s9;
+    end
+    else if(!crono && cr_activo && s_actual<=4'hd)begin
+        s_actual<=s12;
     end
     else
         s_actual <=s_next;
@@ -46,7 +51,7 @@ end
 
 //Máquina de Estados----------------------------------------------------------
 always@*begin
-if(!inicio && !reset && !crono && escribe)begin   //escritura de registros de fecha y hora
+if(!inicio && !reset && !crono && escribe && !cr_activo)begin   //escritura de registros de fecha y hora
 case(s_actual)
     s0:begin                                                   //am-pm---24hrs
     if(!suma && !resta && !izquierda && !derecha)begin
@@ -389,7 +394,7 @@ case(s_actual)
 endcase
 end
 //Programación del cronómetro-----------------------------------------------------------------------------
-else if(!inicio && !reset && crono && !escribe)begin              
+else if(!inicio && !reset && crono && !escribe && !cr_activo)begin              
     case(s_actual)
       s9:begin                                                  //segundos crono
       if(!suma && !resta && !izquierda && !derecha)begin
@@ -504,9 +509,16 @@ else if(!inicio && !reset && crono && !escribe)begin
        end               
     endcase
 end
+
+else if(!inicio && !reset && !crono && !escribe && cr_activo)begin 
+  address<=8'h00;
+  data_activo<=8'h08;  
+end
+
+
 else begin
 registro=registro;
-address=8'h00;
+address=8'hZZ;
 suma_reg=suma_reg;
 resta_reg=resta_reg;
 s_next=s0;
@@ -665,8 +677,11 @@ always@*
    else if(address==8'h43 )begin
     data_mod<=horas_cr_reg;end
     
-   else if(address==8'h00)begin
-   data_mod<=data_directo;end 
+   else if(address==8'h00 && s_actual<s12)begin
+   data_mod<=data_directo;end
+   
+   else if(address==8'h00 && s_actual==s12)begin
+   data_mod<=data_activo;end 
 
 //falta asignar datos fantasma que son leidos por el controlador de la VGA durante la lectura
                   

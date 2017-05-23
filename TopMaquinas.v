@@ -4,7 +4,7 @@ module TopMaquinas(
     input wire clk,
     output reg [7:0] data,
     output reg [7:0] address,
-    input wire inicio,escribe,crono,reset1,
+    input wire inicio,escribe,crono,reset1,cr_activo,
     input wire push_arriba,push_abajo,push_izquierda,push_derecha,
     inout wire [7:0] DATA_ADDRESS,
     output wire [7:0]data_mod,
@@ -35,7 +35,7 @@ Protocolo_rtc rtc_unit(.clk(clk),.address(address),.DATA_WRITE(data),.IndicadorM
 
 MaquinaEscritura Escritura_unit(.clk(clk),.inicio(inicio),.reset(reset),.crono(crono),.escribe(escribe),.suma(push_arriba),.resta(push_abajo),.data_mod(data_mod),
                                 .izquierda(push_izquierda),.derecha(push_derecha),.address(address_escritura),.segundos(datos0),.minutos(datos1),.horas(datos2),.date(datos3),.num_semana(datos4),.mes(datos5),
-                                .ano(datos6),.dia_sem(datos7),.IndicadorMaquina(IndicadorMaquina),.segundos_cr(datos8),.minutos_cr(datos9),.horas_cr(datos10));
+                                .ano(datos6),.dia_sem(datos7),.IndicadorMaquina(IndicadorMaquina),.segundos_cr(datos8),.minutos_cr(datos9),.horas_cr(datos10),.cr_activo(cr_activo));
 
 Registros Reg_unit(.clk(clk),.AoD(AoD),.data_vga(data_vga),.address(address),.data_0(datos0),.data_1(datos1),.data_2(datos2),.data_3(datos3),.data_4(datos4),
                                 .data_5(datos5),.data_6(datos6),.data_7(datos7),.data_8(datos8),.data_9(datos9),.data_10(datos10));
@@ -52,14 +52,17 @@ end
 
 //MUX PARA DATOS a Programar--------------------------------------------------------------------------------------------
 always @*begin
-    if(inicio && !escribe && !crono && !reset)begin   
+    if(inicio && !escribe && !crono && !reset && !cr_activo)begin   
     data=data_inicio;end
-    else if(reset && !inicio && !escribe && !crono) begin
+    else if(reset && !inicio && !escribe && !crono && !cr_activo) begin
     data=data_inicio;end
-    else if(!reset && !inicio && escribe && !crono)begin
+    else if(!reset && !inicio && escribe && !crono && !cr_activo)begin
     data=data_mod;end
-    else if(!reset && !inicio && !escribe && crono)begin
+    else if(!reset && !inicio && !escribe && crono && !cr_activo)begin
     data=data_mod;end
+    else if(!reset && !inicio && !escribe && !crono && cr_activo)begin
+    data=data_mod;
+    end
     else begin
     data=8'hZZ;end
 end
@@ -67,16 +70,18 @@ end
 //MUX PARA DIRECCIONES----------------------------------------------------------------------------------------
 
 always @*begin
-    if(inicio && !escribe && !crono && !reset)begin   
+    if(inicio && !escribe && !crono && !reset && !cr_activo)begin   
     address=address_inicio;
     end
-    else if(reset && !inicio && !escribe && !crono) begin
+    else if(reset && !inicio && !escribe && !crono && !cr_activo) begin
     address=address_inicio;end
-    else if(!reset && !inicio && !escribe && !crono)begin
+    else if(!reset && !inicio && !escribe && !crono && !cr_activo)begin
     address=address_lectura;end
-    else if(!reset && !inicio && escribe && !crono)begin
+    else if(!reset && !inicio && escribe && !crono && !cr_activo)begin
     address=address_escritura;end
-    else  if(!reset && !inicio && !escribe && crono)begin
+    else  if(!reset && !inicio && !escribe && crono && !cr_activo)begin
+    address=address_escritura;end
+    else  if(!reset && !inicio && !escribe &&!crono && cr_activo) begin
     address=address_escritura;end
     else begin
     address=8'hZZ;end
@@ -86,16 +91,19 @@ end
 //LOGICA COMBINACIONAL PARA GENERADOR DE FUNCIONES (INDICADORMaquina)--------------------------------------------
 
 always @*begin
- if(inicio && !reset && !escribe && !crono)begin
+ if(inicio && !reset && !escribe && !crono && !cr_activo)begin
  IndicadorMaquina=0;
  end
- else if(!inicio && reset && !escribe && !crono)begin
+ else if(!inicio && reset && !escribe && !crono && !cr_activo)begin
  IndicadorMaquina=0;
  end
- else if (!inicio && !reset && escribe && !crono)begin
+ else if (!inicio && !reset && escribe && !crono && !cr_activo)begin
  IndicadorMaquina=0;
  end
- else if(!inicio && !reset && !escribe && crono)begin
+ else if(!inicio && !reset && !escribe && crono && !cr_activo)begin
+ IndicadorMaquina=0;
+ end
+ else if(!inicio && !reset && !escribe && !crono && cr_activo)begin
  IndicadorMaquina=0;
  end
  else begin
