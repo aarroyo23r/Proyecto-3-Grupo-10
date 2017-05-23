@@ -5,8 +5,10 @@
 
 #EQU lectura,s1 	 		 ;Registro que contiene las señales de salida del estado lectura
 #EQU escritura,s2 		 ;Registro que contiene las señales de salida del estado escritura
-#EQU controlCrono,s3 	 ;Registro que contiene las señales de salida del estado controlCrono
-#EQU control,s4 	         ;Registro las entradas de la maquina de estados
+#EQU programarCrono,s3 	 ;Registro que contiene las señales de salida del estado ProgramarCrono
+#EQU control,s5 	         ;Registro las entradas de la maquina de estados
+#EQU cronoActivo,s4 	     ;Registro que contiene las señales de salida del estado cronoActivo
+
 
 ;==================================================================================================================================
 ;Perifericos
@@ -23,7 +25,8 @@
 ;Salidas de los Estados
 load lectura,0x01
 load escritura,0x02
-load controlCrono,0x03
+load programarCrono,0x03
+load cronoActivo,0x04
 int enable 					;Habilita las interrupciones
 
 ;==================================================================================================================================
@@ -38,19 +41,19 @@ jump Reset					;Salta para comprobar si la señal reset esta activa
 
 ;Logica reset
 Reset:
-comp control,0x08			;Determina si el bit de reset esta activo
-jump nc MaquinaEntrada		;Si el bit de reset esta activo vuelve a captar las señales de entrada de la FSM
+comp control,0x43			;Determina si reset esta activo Tecla R
+jump z MaquinaEntrada		;Si el bit de reset esta activo vuelve a captar las señales de entrada de la FSM
 
 
 ;Verifica si el bit inicio esta activo
-comp control,0x00			;Verifica que haya alguna entrada activa
-jump z Lectura				;Si no hay alguna entrada activa salta a lectura
-comp control,0x02			;Determina si el bit de inicio esta activo
-jump c Escritura				;Si el bit inicio esta activo salta al estado Escritura
+;comp control,0x4b			;Verifica que haya alguna entrada activa
+;jump z Lectura				;Si no hay alguna entrada activa salta a lectura
+comp control,0x02			;Determina si el bit de inicio esta activo 0x01
+jump z Escritura				;Si el bit inicio esta activo salta al estado Escritura
 
 ;Verifica si el bit escritura esta activo
-comp control,0x03
-jump c Escritura
+comp control,0x24           ;Tecla E activa escritura
+jump z Escritura				;Salta al estado Escritura
 
 ;Estado Lectura
 Lectura:
@@ -58,22 +61,29 @@ wrprt lectura,EstadoPort	;Escribe las señáles del estado lectura en el puerto 
 
 
 ;Verifica si el bit ProgramarCrono esta activo
-comp control,0x00			;Verifica que haya alguna entrada activa
-jump z Lectura				;Si no hay alguna entrada activa salta a lectura
-comp control,0x07			;Determina si el bit de ProgramarCrono esta activo
-jump c ControlCrono			;Si el bit inicio esta ProgramarCrono salta al estado ControlCrono
+;comp control,0x4b			;Verifica que no se quiera pasar a lectura Letra L
+;jump z Lectura				;Si no hay alguna entrada activa salta a lectura
+comp control,0x4d			;Determina si ProgramarCrono esta activo  Letra P
+jump z ProgramandoCrono	    ;Si el bit inicio esta ProgramarCrono salta al estado ControlCrono
 
 
+;Verifica si se quiere iniciar el cronometro o esta activo
+CronoActivo:
+comp control,0x21           ;Tecla C Correr crono Activo
+jump nz MaquinaEntrada      ;Vuelve al captar las señales de entrada de la maquina de estados
+wrprt cronoActivo,EstadoPort
+jump MaquinaEntrada         ;Vuelve al captar las señales de entrada de la maquina de estados
 
 ;Estado Escritura
 Escritura:
 wrprt escritura,EstadoPort	;Escribe las señáles del estado escritura en el puerto de salida EstadoPort
 jump MaquinaEntrada			;Vuelve al captar las señales de entrada de la maquina de estados
 
-;Estado ControlCrono
-ControlCrono:
-wrprt controlCrono,EstadoPort	;Escribe las señáles del estado escritura en el puerto de salida EstadoPort
-jump MaquinaEntrada			;Vuelve al captar las señales de entrada de la maquina de estados
+;Estado ProgramarCrono
+ProgramandoCrono:
+wrprt programarCrono,EstadoPort	;Escribe las señáles del estado escritura en el puerto de salida EstadoPort
+jump CronoActivo			    ;Vuelve al captar las señales de entrada de la maquina de estados
+
 
 
 
@@ -82,9 +92,8 @@ jump MaquinaEntrada			;Vuelve al captar las señales de entrada de la maquina de
 ;==================================================================================================================================
 Tecla:
 rdprt tecla,teclaInPort		;Capta la tecla
-wrprt tecla,teclaOutPort		;Envia la tecla captada hacia la interfaz grafica y el control del RTC
-load tecla,0					;Vuelve a poner el registro en 0
+wrprt tecla,teclaOutPort		;Envia la tecla captada hacia otros modulos
 reti enable
 
-#ORG 0x3ff					;Posicion de la instruccion que se ejecuta al ocurrir una interrupcion
+#ORG 0x1d					;Posicion de la instruccion que se ejecuta al ocurrir una interrupcion
 jump Tecla					;Subrutina para captar tecla
