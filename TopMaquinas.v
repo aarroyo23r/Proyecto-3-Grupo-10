@@ -4,23 +4,28 @@ module TopMaquinas(
     input wire clk,
     output reg [7:0] data,
     output reg [7:0] address,
-    input wire inicio,escribe,crono,reset1,cr_activo,
+    input wire escribe,crono,reset1,cr_activo,
     input wire push_arriba,push_abajo,push_izquierda,push_derecha,
     inout wire [7:0] DATA_ADDRESS,
     output wire [7:0]data_mod,
     output wire [7:0] data_vga,
+    output wire inicio1,
     output wire ChipSelect,Read,Write,AoD //Señales de entrada del RTC
     );
+localparam [12:0] limit =16'd1034;    
 wire [7:0] data_inicio;
 wire [7:0] address_inicio;
 wire [7:0] address_lectura,address_escritura; 
 wire [6:0] contador2;
 reg IndicadorMaquina;
 reg reset;
-
+reg inicio=1;
+reg [12:0]contador_inicio=0;
+reg [12:0]contador_reset=0;
 
 wire[7:0] datos0,datos1,datos2, datos3,datos4, datos5,datos6, datos7,datos8,datos9,datos10;
 
+assign inicio1=inicio;
 
 //módulos instanciados-----------------------------------------------------------------------------------------
 
@@ -41,14 +46,20 @@ Registros Reg_unit(.clk(clk),.AoD(AoD),.data_vga(data_vga),.address(address),.da
                                 .data_5(datos5),.data_6(datos6),.data_7(datos7),.data_8(datos8),.data_9(datos9),.data_10(datos10));
 
 //Lógica para evitar reset en momento incorrecto--------------------------------------------------------
+
 always@(posedge clk)begin
     if(reset1 && contador2==7'h4a)begin
     reset<=1;
     end
-    else if(!reset1)begin
+    else if(!reset1 && address==8'h02)begin
     reset<=0;
     end
+    else begin
+    reset<=reset;
+    end
 end
+
+
 
 //MUX PARA DATOS a Programar--------------------------------------------------------------------------------------------
 always @*begin
@@ -86,7 +97,19 @@ always @*begin
     else begin
     address=8'hZZ;end
 end
-    
+
+//LOGICA DE REG INICIO PARA INICIALIZACIÓN
+always@(posedge clk)begin
+   if((inicio) && contador_inicio<=limit)begin
+        contador_inicio<=contador_inicio +1;
+   end
+   else if(inicio && contador_inicio==limit)begin
+        inicio<=0;
+   end
+   else begin
+   inicio<=0;end
+      
+   end
 
 //LOGICA COMBINACIONAL PARA GENERADOR DE FUNCIONES (INDICADORMaquina)--------------------------------------------
 

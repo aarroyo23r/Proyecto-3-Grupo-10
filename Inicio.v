@@ -30,7 +30,7 @@ begin
     end
 
 
-always @*begin
+always @(posedge clk)begin
   if((!crono && !escribe && inicio)|reset)begin
     case(c_dir)
         4'h1:
@@ -51,60 +51,48 @@ always @*begin
          4'h4:
             begin
             address<=8'h22;
-            data_out<=8'h00;
             end
          4'h5:
             begin
             address<=8'h23;
-            data_out<=8'h00;
             end
          4'h6:
             begin
             address<=8'h24;
-            data_out<=8'h00;
             end
          4'h7:
             begin
             address<=8'h25;
-            data_out<=8'h00;
             end
          4'h8:
             begin
             address<=8'h26;
-            data_out<=8'h00;
             end
          4'h9:
             begin
             address<=8'h27;
-            data_out<=8'h00;
             end
          4'ha:
             begin
             address<=8'h28;
-            data_out<=8'h00;
             end
          4'hb:
             begin
             address<=8'h41;
-            data_out<=8'h00;
             end
          4'hc:
             begin
             address<=8'h42;
-            data_out<=8'h00;
             end
          4'hd:
             begin
             address<=8'h43;
-            data_out<=8'h00;
             end
-         default: begin
-         address<=8'hZZ;
-         data_out<=8'hZZ;end
+
     endcase
     end
     else
-    address<=8'hZZ;
+    address<=address;
     end
 
 endmodule

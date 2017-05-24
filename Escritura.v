@@ -51,6 +51,7 @@ end
 
 //Máquina de Estados----------------------------------------------------------
 always@*begin
+
 if(!inicio && !reset && !crono && escribe && !cr_activo)begin   //escritura de registros de fecha y hora
 case(s_actual)
     s0:begin                                                   //am-pm---24hrs
@@ -65,12 +66,16 @@ case(s_actual)
                 registro=5'd0;
                 address=8'h00;
                 data_directo=8'h10;
+                suma_reg=0;
+                resta_reg=0;
                 s_next=s0;
                  end
     else if(!suma && resta && !izquierda && !derecha)begin
                 registro=5'd0;
                 address=8'h00;
                 data_directo=8'h00;
+                suma_reg=0;
+                resta_reg=0;
                 s_next=s0;
                 end
     
@@ -88,6 +93,12 @@ case(s_actual)
                 resta_reg=0;
                 s_next=s1;
                 end
+    else begin
+                registro=8'hZZ;
+                address=8'hZZ;
+                suma_reg=0;
+                resta_reg=0;
+                s_next=s0;end            
     
     end
     s1:begin                                                   //segundos
@@ -127,6 +138,12 @@ case(s_actual)
                 resta_reg=0;
                 s_next=s2;
                 end
+                else begin
+                registro=8'hZZ;
+                address=8'hZZ;
+                suma_reg=0;
+                resta_reg=0;
+                s_next=s1;end
     end
     s2:begin                                                   //minutos
     if(!suma && !resta && !izquierda && !derecha)begin
@@ -165,6 +182,12 @@ case(s_actual)
                 resta_reg=0;
                 s_next=s3;
                 end
+                else begin
+                registro=8'hZZ;
+                address=8'hZZ;
+                suma_reg=0;
+                resta_reg=0;
+                s_next=s2;end
     end
     s3:begin                                                   //horas
     if(!suma && !resta && !izquierda && !derecha)begin
@@ -203,6 +226,12 @@ case(s_actual)
                 resta_reg=0;
                 s_next=s4;
                 end
+                else begin
+                registro=8'hZZ;
+                address=8'hZZ;
+                suma_reg=0;
+                resta_reg=0;
+                s_next=s3;end
     end
     s4:begin                                                   //date
     if(!suma && !resta && !izquierda && !derecha)begin
@@ -240,6 +269,12 @@ case(s_actual)
                 resta_reg=0;
                 s_next=s5;
                 end
+                else begin
+                registro=8'hZZ;
+                address=8'hZZ;
+                suma_reg=0;
+                resta_reg=0;
+                s_next=s4;end
         end
    s5:begin                                                   //mes
    if(!suma && !resta && !izquierda && !derecha)begin
@@ -278,6 +313,12 @@ case(s_actual)
                 resta_reg=0;
                 s_next=s6;
                 end
+                else begin
+                registro=8'hZZ;
+                address=8'hZZ;
+                suma_reg=0;
+                resta_reg=0;
+                s_next=s5;end
     end
     s6:begin                                                   //año
     if(!suma && !resta && !izquierda && !derecha)begin
@@ -315,6 +356,12 @@ case(s_actual)
                 resta_reg=0;
                 s_next=s7;
                 end
+                else begin
+                registro=8'hZZ;
+                address=8'hZZ;
+                suma_reg=0;
+                resta_reg=0;
+                s_next=s6;end
    end
    s7:begin                                                   //dia_semana
       if(!suma && !resta && !izquierda && !derecha)begin
@@ -352,6 +399,12 @@ case(s_actual)
                 resta_reg=0;
                 s_next=s8;
                 end
+                else begin
+                registro=8'hZZ;
+                address=8'hZZ;
+                suma_reg=0;
+                resta_reg=0;
+                s_next=s7;end
       end
       s8:begin                                                   //numero_semana
       if(!suma && !resta && !izquierda && !derecha)begin
@@ -389,7 +442,19 @@ case(s_actual)
                 resta_reg=0;
                 s_next=s0;
                 end
+      else begin
+                registro=8'hZZ;
+                address=8'hZZ;
+                suma_reg=0;
+                resta_reg=0;
+                s_next=s8;end
       end
+      default:begin
+                registro=8'hZZ;
+                address=8'hZZ;
+                suma_reg=0;
+                resta_reg=0;
+                s_next=s0;end  
     
 endcase
 end
@@ -431,7 +496,13 @@ else if(!inicio && !reset && crono && !escribe && !cr_activo)begin
                   suma_reg=0;
                   resta_reg=0;
                   s_next=s10;
-                  end  
+                  end
+      else begin
+                  registro=8'hZZ;
+                  address=8'hZZ;
+                  suma_reg=0;
+                  resta_reg=0;
+                  s_next=s9;end  
       end
       s10:begin                                             // minutos crono
       if(!suma && !resta && !izquierda && !derecha)begin
@@ -469,6 +540,12 @@ else if(!inicio && !reset && crono && !escribe && !cr_activo)begin
                       resta_reg=0;
                       s_next=s11;
                       end
+           else begin
+                      registro=8'hZZ;
+                      address=8'hZZ;
+                      suma_reg=0;
+                      resta_reg=0;
+                      s_next=s10;end
            end
            s11:begin                                            //horas crono
            if(!suma && !resta && !izquierda && !derecha)begin
@@ -506,21 +583,37 @@ else if(!inicio && !reset && crono && !escribe && !cr_activo)begin
                       resta_reg=0;
                       s_next=s9;
                       end
-       end               
+          else begin
+                      registro=8'hZZ;
+                      address=8'hZZ;
+                      suma_reg=0;
+                      resta_reg=0;
+                      s_next=s11;end
+       end
+       default:begin
+                      registro=8'hZZ;
+                      address=8'hZZ;
+                      suma_reg=0;
+                      resta_reg=0;
+                      s_next=s0;end                   
     endcase
 end
 
 else if(!inicio && !reset && !crono && !escribe && cr_activo)begin 
-  address<=8'h00;
-  data_activo<=8'h08;  
+  address=8'h00;
+  data_activo=8'h08;
+  registro=8'hZZ;
+  suma_reg=0;
+  resta_reg=0;
+  s_next=4'hZ;  
 end
 
 
 else begin
-registro=registro;
+registro=0;
 address=8'hZZ;
-suma_reg=suma_reg;
-resta_reg=resta_reg;
+suma_reg=0;
+resta_reg=0;
 s_next=s0;
 end
 end
@@ -644,44 +737,41 @@ end
 always@*
   begin
   if(address==8'h21)begin
-  data_mod<=segundos_reg;
-    end
+  data_mod=segundos_reg;
+  end
   else if(address==8'h22)begin
-    data_mod<=minutos_reg;
-    end
+  data_mod=minutos_reg;
+  end
   else if(address==8'h23)begin
-    data_mod<=horas_reg;
-    end
+  data_mod=horas_reg;
+  end
   else if(address==8'h24)begin
-    data_mod<=date_reg;
-    end
-    
-   else if(address==8'h25)begin
-    data_mod<=mes_reg;
-    end
-   else if(address==8'h26)begin
-    data_mod<=ano_reg;
-    end
-   else if(address==8'h27)begin
-    data_mod<=num_semana_reg;
-    end
-   else if(address==8'h28)begin
-    data_mod<=dia_sem_reg;
-    end
-   else if(address==8'h41)begin
-    data_mod<=segundos_cr_reg;end
-    
-   else if(address==8'h42) begin
-    data_mod<=minutos_cr_reg;end
-   
-   else if(address==8'h43 )begin
-    data_mod<=horas_cr_reg;end
-    
-   else if(address==8'h00 && s_actual<s12)begin
-   data_mod<=data_directo;end
-   
-   else if(address==8'h00 && s_actual==s12)begin
-   data_mod<=data_activo;end 
+  data_mod=date_reg;
+  end
+  else if(address==8'h25)begin
+  data_mod=mes_reg;
+  end
+  else if(address==8'h26)begin
+  data_mod=ano_reg;
+  end
+  else if(address==8'h27)begin
+  data_mod=num_semana_reg;
+  end
+  else if(address==8'h28)begin
+  data_mod=dia_sem_reg;
+  end
+  else if(address==8'h41)begin
+  data_mod=segundos_cr_reg;end
+  else if(address==8'h42) begin
+  data_mod=minutos_cr_reg;end
+  else if(address==8'h43 )begin
+  data_mod=horas_cr_reg;end
+  else if(address==8'h00 && s_actual<s12)begin
+  data_mod=data_directo;end 
+  else if(address==8'h00 && s_actual==s12)begin
+  data_mod=data_activo;end  
+  else begin
+  data_mod=8'hZZ;end
 
 //falta asignar datos fantasma que son leidos por el controlador de la VGA durante la lectura
                   
