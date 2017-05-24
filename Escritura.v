@@ -770,8 +770,7 @@ always@*
   data_mod=data_directo;end 
   else if(address==8'h00 && s_actual==s12)begin
   data_mod=data_activo;end  
-  else begin
-  data_mod=8'hZZ;end
+
 
 //falta asignar datos fantasma que son leidos por el controlador de la VGA durante la lectura
                   
