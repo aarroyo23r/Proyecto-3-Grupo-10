@@ -35,13 +35,13 @@ int enable 					;Habilita las interrupciones
 
 ;Señáles de entrada de la maquina de estados
 MaquinaEntrada:
-				        
+
 rdprt control,controlPort	;Capta las señáles de entrada de la maquina de estados
 jump Reset					;Salta para comprobar si la señal reset esta activa
 
 ;Logica reset
 Reset:
-comp control,0x43			;Determina si reset esta activo Tecla R
+comp control,0x2d			;Determina si reset esta activo Tecla R
 jump z MaquinaEntrada		;Si el bit de reset esta activo vuelve a captar las señales de entrada de la FSM
 
 
