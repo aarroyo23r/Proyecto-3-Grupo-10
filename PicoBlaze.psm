@@ -1,21 +1,20 @@
 ;==================================================================================================================================
 ;Nombres de los registros
 ;==================================================================================================================================
-#EQU tecla,s0 			 ;Tecla recibida del controlador PS/2 y registro para procesos intermedios
+;#EQU tecla,s0 			 ;Tecla recibida del controlador PS/2 y registro para procesos intermedios
 
 #EQU lectura,s1 	 		 ;Registro que contiene las señales de salida del estado lectura
 #EQU escritura,s2 		 ;Registro que contiene las señales de salida del estado escritura
 #EQU programarCrono,s3 	 ;Registro que contiene las señales de salida del estado ProgramarCrono
 #EQU control,s5 	         ;Registro las entradas de la maquina de estados
 #EQU cronoActivo,s4 	     ;Registro que contiene las señales de salida del estado cronoActivo
+#EQU temp,s6 
 
 
 ;==================================================================================================================================
 ;Perifericos
 ;==================================================================================================================================
-#EQU teclaInPort,00		  ;Puerto de entrada del teclado PS/2
 #EQU teclaOutPort,01	 	  ;Salida de la tecla hacia la interfaz
-
 #EQU EstadoPort,02        ;Salidas de la maquina de estados
 #EQU controlPort,03       ;Puerto entradas para el control de la maquina de estados
 
@@ -33,21 +32,20 @@ int enable 					;Habilita las interrupciones
 ;Rutina:   Maquina de estados Principal
 ;=================================================================================================================================
 
+
+Inicializacion:
+load control,0x02
+
 ;Señáles de entrada de la maquina de estados
 MaquinaEntrada:
-
-rdprt control,controlPort	;Capta las señáles de entrada de la maquina de estados
-jump Reset					;Salta para comprobar si la señal reset esta activa
+				        
 
 ;Logica reset
 Reset:
-comp control,0x2d			;Determina si reset esta activo Tecla R
-jump z MaquinaEntrada		;Si el bit de reset esta activo vuelve a captar las señales de entrada de la FSM
-
+comp control,0x43			;Determina si reset esta activo Tecla R
+jump z Inicializacion		;Si el bit de reset esta activo vuelve a captar las señales de entrada de la FSM
 
 ;Verifica si el bit inicio esta activo
-;comp control,0x4b			;Verifica que haya alguna entrada activa
-;jump z Lectura				;Si no hay alguna entrada activa salta a lectura
 comp control,0x02			;Determina si el bit de inicio esta activo 0x01
 jump z Escritura				;Si el bit inicio esta activo salta al estado Escritura
 
@@ -55,14 +53,13 @@ jump z Escritura				;Si el bit inicio esta activo salta al estado Escritura
 comp control,0x24           ;Tecla E activa escritura
 jump z Escritura				;Salta al estado Escritura
 
+
 ;Estado Lectura
 Lectura:
 wrprt lectura,EstadoPort	;Escribe las señáles del estado lectura en el puerto de salida EstadoPort
 
 
 ;Verifica si el bit ProgramarCrono esta activo
-;comp control,0x4b			;Verifica que no se quiera pasar a lectura Letra L
-;jump z Lectura				;Si no hay alguna entrada activa salta a lectura
 comp control,0x4d			;Determina si ProgramarCrono esta activo  Letra P
 jump z ProgramandoCrono	    ;Si el bit inicio esta ProgramarCrono salta al estado ControlCrono
 
@@ -91,9 +88,18 @@ jump CronoActivo			    ;Vuelve al captar las señales de entrada de la maquina d
 ;Subrutina:   Captar Tecla
 ;==================================================================================================================================
 Tecla:
-rdprt tecla,teclaInPort		;Capta la tecla
-wrprt tecla,teclaOutPort		;Envia la tecla captada hacia otros modulos
+rdprt temp,controlPort	    ;Capta la tecla y la guarda en un registro temporal
+comp temp,0x1d              ;Si la tecla es una w
+jump z TeclaSalida          ;Envia la tecla
+comp temp,0x1b              ;Si la tecla es una s
+jump z TeclaSalida          ;Envia la tecla
+load control,temp           ;Guarda la tecla como entrada de la maquina de estados
 reti enable
 
-#ORG 0x1d					;Posicion de la instruccion que se ejecuta al ocurrir una interrupcion
+;Tecla Salida
+TeclaSalida:
+wrprt temp,teclaOutPort		;Envia la tecla captada hacia otros modulos
+reti enable
+
+#ORG 0x3ff	   			    ;Posicion de la instruccion que se ejecuta al ocurrir una interrupcion 1d
 jump Tecla					;Subrutina para captar tecla

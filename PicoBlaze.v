@@ -64,24 +64,15 @@ MemoriaDeInstrucciones MemoriaDeInstrucciones_unit (
           
 //PicoBlaze
  kcpsm6 kcpsm6_unit(
-    .address(address),.instruction(instruction),.bram_enable(bram_enable),.in_port(in_port)
+    .address(address),.instruction(instruction),.bram_enable(bram_enable),.in_port(in)
     ,.out_port(out_port),.port_id(port_id),.write_strobe(write_strobe),.k_write_strobe(k_write_strobe)
-    ,.read_strobe(read_strobe),.interrupt(interrupt),.interrupt_ack(interrupt_ack),.sleep(sleep)
+    ,.read_strobe(read_strobe),.interrupt(interrupcion),.interrupt_ack(interrupt_ack),.sleep(sleep)
     ,.reset(reset),.clk(clk)
     );
 
 
 //Mux entrada e interrupciones
 
-always @*
-if(!read_strobe && port_id==8'h03)begin
-in=in_port;
-end
-
-else begin
-in=0;
-end
-/*
 always @*
 
 //Si la señal de inicio esta activa y aun no se atendio
@@ -95,7 +86,8 @@ else begin
 in=in_port;
 interrupcion=interrupt;
 end
-*/
+
+
 
 //Mux  y registros de salida
 always @(posedge clk)
@@ -111,7 +103,7 @@ end
 
 else begin
 teclaOutPort<=0;
-EstadoPort<=0;
+EstadoPort<=EstadoPort;
 end
 
 
