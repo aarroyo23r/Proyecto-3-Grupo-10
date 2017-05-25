@@ -79,7 +79,7 @@ assign data_in_b = data_out_b[17:0];
 assign enable_b = 1'b0;
 assign we_b = 4'h0;
 assign clk_b = 1'b0;
-// 
+//  
 //
 RAMB18E1 # ( .READ_WIDTH_A              (18),
              .WRITE_WIDTH_A             (18),
