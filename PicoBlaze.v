@@ -27,7 +27,8 @@ module PicoBlaze(
 
   output wire	interrupt_ack,//Indica que ya se atendio la interrupcion
   output reg [7:0]EstadoPort,//Señales de salida maquina de estados general
-  output wire sumar,restar //Señáles de control para la suma o resta
+  output wire sumar,restar, //Señáles de control para la suma o resta
+  output wire izquierda,derecha //Señales de control para moverse entre los registros
     );
 
     //inicializacion
@@ -53,6 +54,9 @@ module PicoBlaze(
 
     //Señales para suma y resta
     reg suma,resta;
+    
+    //Señales para moverse entre registros
+    reg izquierdaReg,derechaReg;
 
 
 //Memoria de Instrucciones
@@ -61,7 +65,7 @@ MemoriaDeInstrucciones MemoriaDeInstrucciones_unit (
            .address(address),.clk(clk),
            .instruction(instruction),.enable(bram_enable)
           );
-
+          
 //PicoBlaze
  kcpsm6 kcpsm6_unit(
     .address(address),.instruction(instruction),.bram_enable(bram_enable),.in_port(in)
@@ -73,7 +77,7 @@ MemoriaDeInstrucciones MemoriaDeInstrucciones_unit (
 
 //Mux entrada e interrupciones
 
-always @*  
+always @*
 
 //Si la señal de inicio esta activa y aun no se atendio
 if (inicio && !interrupt_ack)begin
@@ -108,11 +112,11 @@ end
 //Deco para sumas y restas
 
 always @*
-if (teclaOutPort==8'h1d)begin //Tecla W
+if (teclaOutPort==8'h57)begin //Tecla W
 suma=1;
 resta=0;
 end
-else if (teclaOutPort==8'h1b)begin//Tecla S
+else if (teclaOutPort==8'h53)begin//Tecla S
 suma=0;
 resta=1;
 end
@@ -122,8 +126,26 @@ suma=0;
 resta=0;
 end
 
+//Deco Izquierda derecha
+always @*
+if (teclaOutPort==8'h65)begin //Tecla A
+izquierdaReg=1;
+derechaReg=0;
+end
+else if (teclaOutPort==8'h68)begin//Tecla D
+izquierdaReg=0;
+derechaReg=1;
+end
+
+else begin
+izquierdaReg=0;
+derechaReg=0;
+end
+
+
 //Salidas
 assign sumar=suma;
 assign restar=resta;
-
+assign izquierda=izquierdaReg;
+assign derecha=derechaReg;
 endmodule
