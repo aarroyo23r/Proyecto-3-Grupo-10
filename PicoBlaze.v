@@ -61,7 +61,7 @@ MemoriaDeInstrucciones MemoriaDeInstrucciones_unit (
            .address(address),.clk(clk),
            .instruction(instruction),.enable(bram_enable)
           );
-          
+
 //PicoBlaze
  kcpsm6 kcpsm6_unit(
     .address(address),.instruction(instruction),.bram_enable(bram_enable),.in_port(in)
@@ -73,7 +73,7 @@ MemoriaDeInstrucciones MemoriaDeInstrucciones_unit (
 
 //Mux entrada e interrupciones
 
-always @*
+always @* 
 
 //Si la señal de inicio esta activa y aun no se atendio
 if (inicio && !interrupt_ack)begin
