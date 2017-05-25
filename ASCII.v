@@ -1,3 +1,4 @@
+`timescale 1ns / 1ps
 
 module ASCII(
     input wire [7:0] key_code,
@@ -26,23 +27,23 @@ always @*
     8'h34:ascii_code = 8'h47; //G
     8'h33:ascii_code = 8'h48; //H
     8'h43:ascii_code = 8'h49; //I
-    8'h3b:ascii_code = 8'h50; //J
-    8'h42:ascii_code = 8'h51; //K
-    8'h4b:ascii_code = 8'h51; //L
-    8'h3a:ascii_code = 8'h51; //M
-    8'h31:ascii_code = 8'h51; //N
-    8'h44:ascii_code = 8'h51; //O
-    8'h4d:ascii_code = 8'h51; //P
+    8'h3b:ascii_code = 8'h4a; //J
+    8'h42:ascii_code = 8'h4b; //K
+    8'h4b:ascii_code = 8'h4c; //L
+    8'h3a:ascii_code = 8'h4d; //M
+    8'h31:ascii_code = 8'h4e; //N
+    8'h44:ascii_code = 8'h4f; //O
+    8'h4d:ascii_code = 8'h50; //P
     8'h15:ascii_code = 8'h51; //Q
-    8'h2d:ascii_code = 8'h51; //R
-    8'h1b:ascii_code = 8'h51; //S
-    8'h2c:ascii_code = 8'h51; //T
-    8'h3c:ascii_code = 8'h51; //U
-    8'h2a:ascii_code = 8'h51; //V
-    8'h1d:ascii_code = 8'h51; //W
-    8'h22:ascii_code = 8'h51; //X
-    8'h35:ascii_code = 8'h51; //Y
-    8'h1a:ascii_code = 8'h51; //Z
+    8'h2d:ascii_code = 8'h52; //R
+    8'h1b:ascii_code = 8'h53; //S
+    8'h2c:ascii_code = 8'h54; //T
+    8'h3c:ascii_code = 8'h55; //U
+    8'h2a:ascii_code = 8'h56; //V
+    8'h1d:ascii_code = 8'h57; //W
+    8'h22:ascii_code = 8'h58; //X
+    8'h35:ascii_code = 8'h59; //Y
+    8'h1a:ascii_code = 8'h5a; //Z
     8'h1a:ascii_code = 8'h20; //space
     8'h1a:ascii_code = 8'h0d; //enter
     8'h1a:ascii_code = 8'h08; //backspace

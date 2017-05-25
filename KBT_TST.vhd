@@ -24,21 +24,22 @@ architecture Test of Kbd_tst is
 --- Declaracion del modulo Verilog a instanciar
 -- Ver mas adelante, cuando lo conectamos
 --- Esto quiere decir que su modulo Verilog debe declararse como module PS2_Ctrl(....)
-Component TopTeclado
+Component TOP
 port( clk : in std_logic; -- System Clock
 Reset : in std_logic; -- System Reset
 ps2c : in std_logic; -- Keyboard Clock Line
-ps2d : in std_logic; -- Keyboard Data Line
-DoRead : in std_logic; -- From outside when reading the scan code
+ps2d : in std_logic); -- Keyboard Data Line
+--DoRead : in std_logic); -- From outside when reading the scan code
 --Scan_Err : out std_logic; -- To outside if wrong parity or Overflow
 --kb_buf_empty : out std_logic; -- To outside when a scan code has arrived
-ascii_code : out std_logic_vector(7 downto 0) ); -- scan code
+--ascii_code : out std_logic_vector(7 downto 0) ); -- scan code
 end component;
 signal Clk : std_logic := '0';
-signal Reset : std_logic;
+signal Reset : std_logic := '0';
 signal Kbd_Clk : std_logic := 'H';
 signal Kbd_Data : std_logic := 'H';
 signal DoRead : std_logic := '0';
+signal DoRead1 : std_logic := '0';
 signal Scan_Err : std_logic;
 signal Scan_DAV : std_logic;
 signal Scan_Code : std_logic_vector(7 downto 0);
@@ -51,8 +52,8 @@ end record;
 type Codes_Table_t is array (natural range <>) of Code_r;
 ---Aqui definimos los valores en hexadecimal a enviar. Pongan los de los numeros dentro de esta tabla
 constant Codes_Table : Codes_Table_t -- if you need more codes: just add them!
-:= ( (x"45",'0'), (x"F0",'0'), (x"45",'0'), (x"16",'0'),  --recordar que se debe de enviar FO para indicar que se solto la tecla
-(x"F0",'0'), (x"16",'0'), (x"45",'0'), (x"F0",'0'),
+:= ( (x"50",'0'), (x"F0",'0'), (x"50",'0'), (x"57",'0'),  --recordar que se debe de enviar FO para indicar que se solto la tecla
+(x"F0",'0'), (x"57",'0'), (x"45",'0'), (x"F0",'0'),
 (x"45",'0'));
 -- in Verilog, the function below is just : ^V ;-)
 function Even (V : std_logic_vector) return std_logic is
@@ -75,15 +76,15 @@ begin
 -- Para instanciar un modulo Verilog en un TestBench en VHDL, vayan a 
 -- El orden de conexion en VHDL sigue el mismo orden que VErilog. Primero va el pin del modulo instanciado, y luego el alambre o sennak
 --ak que estariammos alambrando
-UUT: TopTeclado
+UUT: TOP
 port map ( clk => Clk,
 Reset => Reset,
 ps2c => Kbd_Clk,
-ps2d => Kbd_Data,
-DoRead => DoRead,
+ps2d => Kbd_Data);
+--DoRead => DoRead1);
 --Scan_Err => Scan_Err,
 --kb_buf_empty => Scan_DAV,
-ascii_code => Scan_Code );
+--ascii_code => Scan_Code );
 -- System Clock & Reset
 clk <= not Clk after (Period / 2);
 Reset <= '1', '0' after Period;

@@ -23,7 +23,7 @@
 module PicoBlaze(
   input  wire clk,reset,inicio,
   input	 wire[7:0]	in_port,//Entrada
-  input		wire	interrupt,//Señal de interrupcion
+  input	 wire interrupt,//Señal de interrupcion
 
   output wire	interrupt_ack,//Indica que ya se atendio la interrupcion
   output reg [7:0]EstadoPort,//Señales de salida maquina de estados general

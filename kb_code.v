@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module kb_code
     #(parameter W_SIZE=2)//cantidad de palabras en FIFO
    (
