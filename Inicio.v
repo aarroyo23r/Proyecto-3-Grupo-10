@@ -36,7 +36,7 @@ always @(posedge clk)begin
         4'h1:
             begin
             address<=8'h02;
-            data_out<=8'h08;//Inicializa máquina
+            data_out<=8'h10;//Inicializa máquina
             end
          4'h2:
             begin

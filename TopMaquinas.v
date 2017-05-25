@@ -4,7 +4,7 @@ module TopMaquinas(
     input wire clk,
     output reg [7:0] data,
     output reg [7:0] address,
-    input wire escribe,crono,reset1,cr_activo,
+    input wire escribe1,crono,reset1,cr_activo,
     input wire push_arriba,push_abajo,push_izquierda,push_derecha,
     inout wire [7:0] DATA_ADDRESS,
     output wire [7:0]data_mod,
@@ -18,12 +18,15 @@ wire [7:0] address_inicio;
 wire [7:0] address_lectura,address_escritura; 
 wire [6:0] contador2;
 reg IndicadorMaquina;
-reg reset;
+reg reset,escribe;
 reg inicio=1;
 reg [12:0]contador_inicio=0;
 reg [12:0]contador_reset=0;
 
-wire[7:0] datos0,datos1,datos2, datos3,datos4, datos5,datos6, datos7,datos8,datos9,datos10;
+wire[7:0] datos0,datos1,datos2, datos3,datos4, datos5,datos6, datos7,datos8,datos9,datos10; //datos a controlador_vga durante lectura
+
+ wire [7:0]segundosSal, minutosSal,horasSal,dateSal,num_semanaSal,mesSal,anoSal,dia_semSal; //datos a controlador_vga durante la escritura
+ wire [7:0]segundos_crSal,minutos_crSal,horas_crSal;
 
 assign inicio1=inicio;
 
@@ -40,13 +43,27 @@ Protocolo_rtc rtc_unit(.clk(clk),.address(address),.DATA_WRITE(data),.IndicadorM
 
 MaquinaEscritura Escritura_unit(.clk(clk),.inicio(inicio),.reset(reset),.crono(crono),.escribe(escribe),.suma(push_arriba),.resta(push_abajo),.data_mod(data_mod),
                                 .izquierda(push_izquierda),.derecha(push_derecha),.address(address_escritura),.segundos(datos0),.minutos(datos1),.horas(datos2),.date(datos3),.num_semana(datos4),.mes(datos5),
-                                .ano(datos6),.dia_sem(datos7),.IndicadorMaquina(IndicadorMaquina),.segundos_cr(datos8),.minutos_cr(datos9),.horas_cr(datos10),.cr_activo(cr_activo));
+                                .ano(datos6),.dia_sem(datos7),.IndicadorMaquina(IndicadorMaquina),.segundos_cr(datos8),.minutos_cr(datos9),.horas_cr(datos10),.cr_activo(cr_activo),.segundosSal(segundosSal),.minutosSal(minutosSal),
+                                .horasSal(horasSal),.dateSal(dateSal),.num_semanaSal(num_semanaSal),.mesSal(mesSal),.anoSal(anoSal),.dia_semSal(dia_semSal),
+                                .segundos_crSal(segundos_crSal),.minutos_crSal(minutos_crSal),.horas_crSal(horas_crSal));
 
 Registros Reg_unit(.clk(clk),.AoD(AoD),.data_vga(data_vga),.address(address),.data_0(datos0),.data_1(datos1),.data_2(datos2),.data_3(datos3),.data_4(datos4),
                                 .data_5(datos5),.data_6(datos6),.data_7(datos7),.data_8(datos8),.data_9(datos9),.data_10(datos10));
 
-//Lógica para evitar reset en momento incorrecto--------------------------------------------------------
+//Lógica para evitar escritura en momento incorrecto----------------------------------------------------------
+always@(posedge clk)begin
+    if(escribe1 && contador2==7'h4a)begin
+    escribe<=1;
+    end
+    else if(!escribe1 && contador2==7'h4a)begin
+    escribe=0;
+    end
+    else begin
+    escribe<=escribe;
+    end
+end
 
+//Lógica para evitar reset en momento incorrecto--------------------------------------------------------------
 always@(posedge clk)begin
     if(reset1 && contador2==7'h4a)begin
     reset<=1;
