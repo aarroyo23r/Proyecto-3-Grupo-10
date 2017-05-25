@@ -6,7 +6,9 @@ module MaquinaEscritura(
     input wire [7:0]segundos,minutos,horas,date,num_semana,mes,ano,dia_sem,
     input wire [7:0]segundos_cr,minutos_cr,horas_cr,
     output reg [7:0] address,
-    output reg [7:0]data_mod    
+    output reg [7:0]data_mod,
+    output wire [7:0]segundosSal, minutosSal,horasSal,dateSal,num_semanaSal,mesSal,anoSal,dia_semSal,
+    output wire [7:0]segundos_crSal,minutos_crSal,horas_crSal    
     );
  //Variables----------------------------------------------------------------  
 reg [3:0] s_next=4'h1;reg [3:0] s_actual;
@@ -770,12 +772,22 @@ always@*
   data_mod=data_directo;end 
   else if(address==8'h00 && s_actual==s12)begin
   data_mod=data_activo;end  
+  end
 
+//WIRE fantasma que son leidos por el controlador de la VGA durante la escritura
 
-//falta asignar datos fantasma que son leidos por el controlador de la VGA durante la lectura
-                  
-end
-
+assign segundosSal=segundos_reg,
+       minutosSal=minutos_reg,
+       horasSal=horas_reg,
+       dateSal=date_reg,
+       mesSal=mes_reg,
+       anoSal=ano_reg,
+       num_semanaSal=num_semana_reg,
+       dia_semSal=dia_sem_reg,
+       segundos_crSal=segundos_cr_reg,
+       horas_crSal=horas_cr_reg,
+       minutos_crSal=minutos_cr_reg;
+       
 endmodule
 
 
