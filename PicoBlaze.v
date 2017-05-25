@@ -81,12 +81,10 @@ in=inicioActivo;//Señal de inicio que necesita el picoblaze
 interrupcion=inicio;//Activa la señal de interrupcion
 end
 
-//Interrupciones del teclado
 else begin
 in=in_port;
 interrupcion=interrupt;
 end
-
 
 
 //Mux  y registros de salida
