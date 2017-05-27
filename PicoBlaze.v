@@ -77,7 +77,7 @@ MemoriaDeInstrucciones MemoriaDeInstrucciones_unit (
 
 //Mux entrada e interrupciones
 
-always @*
+always @*begin
 
 //Si la señal de inicio esta activa y aun no se atendio
 if (inicio && !interrupt_ack)begin
@@ -85,9 +85,13 @@ in=inicioActivo;//Señal de inicio que necesita el picoblaze
 interrupcion=inicio;//Activa la señal de interrupcion
 end
 
-else begin
+else if(interrupt)begin
 in=in_port;
-interrupcion=interrupt;
+interrupcion=interrupt;end
+
+else begin
+in=0;
+interrupcion=0;end
 end
 
 

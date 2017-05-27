@@ -14,7 +14,7 @@ use IEEE.Numeric_std.all;
 use IEEE.Std_Logic_Textio.all;
 -------------------
 entity Kbd_tst is
-constant Period : time := 10 ns; -- 100 MHz System Clock
+constant Period : time := 10 ns; -- 25 MHz System Clock
 constant BitPeriod : time := 60 us; -- Kbd Clock is 16.7 kHz max
 end;
 -------------------
@@ -24,22 +24,21 @@ architecture Test of Kbd_tst is
 --- Declaracion del modulo Verilog a instanciar
 -- Ver mas adelante, cuando lo conectamos
 --- Esto quiere decir que su modulo Verilog debe declararse como module PS2_Ctrl(....)
-Component TOP
+Component TopTeclado
 port( clk : in std_logic; -- System Clock
 Reset : in std_logic; -- System Reset
 ps2c : in std_logic; -- Keyboard Clock Line
-ps2d : in std_logic); -- Keyboard Data Line
---DoRead : in std_logic); -- From outside when reading the scan code
+ps2d : in std_logic; -- Keyboard Data Line
+DoRead : in std_logic; -- From outside when reading the scan code
 --Scan_Err : out std_logic; -- To outside if wrong parity or Overflow
---kb_buf_empty : out std_logic; -- To outside when a scan code has arrived
---ascii_code : out std_logic_vector(7 downto 0) ); -- scan code
+--Scan_DAV : out std_logic; -- To outside when a scan code has arrived
+ascii_code : out std_logic_vector(7 downto 0) ); -- scan code
 end component;
 signal Clk : std_logic := '0';
-signal Reset : std_logic := '0';
+signal Reset : std_logic;
 signal Kbd_Clk : std_logic := 'H';
 signal Kbd_Data : std_logic := 'H';
 signal DoRead : std_logic := '0';
-signal DoRead1 : std_logic := '0';
 signal Scan_Err : std_logic;
 signal Scan_DAV : std_logic;
 signal Scan_Code : std_logic_vector(7 downto 0);
@@ -52,9 +51,9 @@ end record;
 type Codes_Table_t is array (natural range <>) of Code_r;
 ---Aqui definimos los valores en hexadecimal a enviar. Pongan los de los numeros dentro de esta tabla
 constant Codes_Table : Codes_Table_t -- if you need more codes: just add them!
-:= ( (x"50",'0'), (x"F0",'0'), (x"50",'0'), (x"57",'0'),  --recordar que se debe de enviar FO para indicar que se solto la tecla
-(x"F0",'0'), (x"57",'0'), (x"45",'0'), (x"F0",'0'),
-(x"45",'0'));
+:= ( (x"24",'0'), (x"F0",'0'), (x"2A",'0'), (x"50",'0'),
+(x"F0",'0'), (x"2B",'0'), (x"24",'0'), (x"F0",'0'),
+(x"24",'0'));
 -- in Verilog, the function below is just : ^V ;-)
 function Even (V : std_logic_vector) return std_logic is
 variable p : std_logic := '0';
@@ -74,21 +73,21 @@ begin
 -- el amo no lo ha leido aun, y ya llego un dato nuevo por el teclado
 -- No obstante, es recomendable dejarlas para mejorar el control y saber si su controlador esta funcionando
 -- Para instanciar un modulo Verilog en un TestBench en VHDL, vayan a 
+--https://www.xilinx.com/itp/xilinx10/isehelp/ism_p_instantiating_verilog_module_mixedlang.htm
 -- El orden de conexion en VHDL sigue el mismo orden que VErilog. Primero va el pin del modulo instanciado, y luego el alambre o sennak
 --ak que estariammos alambrando
-UUT: TOP
+UUT: TopTeclado
 port map ( clk => Clk,
 Reset => Reset,
 ps2c => Kbd_Clk,
-ps2d => Kbd_Data);
---DoRead => DoRead1);
+ps2d => Kbd_Data,
+DoRead => DoRead,
 --Scan_Err => Scan_Err,
---kb_buf_empty => Scan_DAV,
---ascii_code => Scan_Code );
+--Scan_DAV => Scan_DAV,
+ascii_code => Scan_Code );
 -- System Clock & Reset
-clk <= not Clk after (Period / 2);
+Clk <= not Clk after (Period / 2);
 Reset <= '1', '0' after Period;
-
 -- Keyboard sending Data to the Controller
 Emit: process
 procedure SendCode ( D : std_logic_vector(7 downto 0);
@@ -139,7 +138,6 @@ else
 report Lf & " SUCCESSFULL End of simulation : " & Lf &
 " There has been no (zero) error !" & Lf & Ht
 severity note;
-report "End of Simulation" severity failure;
 end if;
 end process Emit;
 

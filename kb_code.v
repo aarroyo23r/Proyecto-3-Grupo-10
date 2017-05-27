@@ -5,8 +5,8 @@ module kb_code
    (
     input wire clk, reset,
     input wire ps2d,ps2c,rd_key_code,
-    output wire [7:0] key_code,
-    output wire kb_buf_empty
+    output reg [7:0] key_code,
+    output reg kb_buf_empty,interrupt
    );
 
    localparam BRK=8'hf0; // break code, indica cuando una tecla es soltada  
@@ -32,12 +32,6 @@ module kb_code
        .ps2d(ps2d), .ps2c(ps2c),
        .rx_done_tick(scan_done_tick), .dout(scan_out));
 
-   // instantiate fifo buffer
-   fifo #(.B(8),.W(W_SIZE)) fifo_key_unit
-   (.clk(clk),.reset(reset),.rd(rd_key_code),
-   .wr(got_code_tick),.w_data(scan_out),
-   .empty(kb_buf_empty),.full(),.r_data(key_code));
-
    //====================================================
    // FSM obtiene el scan_code luego de que el FO es recibido
    //====================================================
@@ -55,14 +49,28 @@ module kb_code
       state_next = state_reg;
       case (state_reg)
          wait_brk:  //se espera por el FO del break code
-            if (scan_done_tick && scan_out==BRK) 
+            if (scan_done_tick && scan_out==BRK) begin
                state_next = get_code;
+               key_code=0;
+               interrupt=0;end
          get_code: // obtiene el seguiente scan_code
                if (scan_done_tick)
                begin
                got_code_tick=1'b1;
+               state_next=get_code;
+               key_code=scan_out;
+               interrupt=1;
+               end
+               else if(rd_key_code)begin
                state_next=wait_brk;
-            end
+               key_code=0;
+               interrupt=0;
+               end
       endcase
    end
+   
+
+
+   
+   
 endmodule

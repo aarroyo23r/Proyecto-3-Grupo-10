@@ -1,4 +1,5 @@
-//
+`timescale 1ps / 1ps
+
 ///////////////////////////////////////////////////////////////////////////////////////////
 // Copyright © 2010-2013, Xilinx, Inc.
 // This file contains confidential and proprietary information of Xilinx, Inc. and is
