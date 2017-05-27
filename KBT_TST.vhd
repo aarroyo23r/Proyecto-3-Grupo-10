@@ -24,15 +24,15 @@ architecture Test of Kbd_tst is
 --- Declaracion del modulo Verilog a instanciar
 -- Ver mas adelante, cuando lo conectamos
 --- Esto quiere decir que su modulo Verilog debe declararse como module PS2_Ctrl(....)
-Component TopTeclado
+Component TOP
 port( clk : in std_logic; -- System Clock
 Reset : in std_logic; -- System Reset
 ps2c : in std_logic; -- Keyboard Clock Line
-ps2d : in std_logic; -- Keyboard Data Line
-DoRead : in std_logic; -- From outside when reading the scan code
+ps2d : in std_logic); -- Keyboard Data Line
+--DoRead : in std_logic; -- From outside when reading the scan code
 --Scan_Err : out std_logic; -- To outside if wrong parity or Overflow
 --Scan_DAV : out std_logic; -- To outside when a scan code has arrived
-ascii_code : out std_logic_vector(7 downto 0) ); -- scan code
+--ascii_code : out std_logic_vector(7 downto 0) ); -- scan code
 end component;
 signal Clk : std_logic := '0';
 signal Reset : std_logic;
@@ -76,18 +76,18 @@ begin
 --https://www.xilinx.com/itp/xilinx10/isehelp/ism_p_instantiating_verilog_module_mixedlang.htm
 -- El orden de conexion en VHDL sigue el mismo orden que VErilog. Primero va el pin del modulo instanciado, y luego el alambre o sennak
 --ak que estariammos alambrando
-UUT: TopTeclado
+UUT: TOP
 port map ( clk => Clk,
 Reset => Reset,
 ps2c => Kbd_Clk,
-ps2d => Kbd_Data,
-DoRead => DoRead,
+ps2d => Kbd_Data);
+--DoRead => DoRead);
 --Scan_Err => Scan_Err,
 --Scan_DAV => Scan_DAV,
-ascii_code => Scan_Code );
+--ascii_code => Scan_Code );
 -- System Clock & Reset
 Clk <= not Clk after (Period / 2);
-Reset <= '1', '0' after Period;
+Reset <= '0';
 -- Keyboard sending Data to the Controller
 Emit: process
 procedure SendCode ( D : std_logic_vector(7 downto 0);

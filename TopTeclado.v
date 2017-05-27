@@ -6,12 +6,12 @@ module TopTeclado(
     input wire ps2c,
     output wire [7:0] ascii_code,
     input wire DoRead,Reset,
-    output wire interrupt
+    output reg interrupt
     );
 wire [7:0] key_code;
 
 kb_code kb_unit(.clk(clk),.reset(Reset),.ps2d(ps2d),.ps2c(ps2c),.rd_key_code(DoRead),
-                .key_code(key_code),.kb_buf_empty(),.interrupt(interrupt));
+                .key_code(key_code),.kb_buf_empty());
                 
 ASCII scan_code2ascii_unit(.key_code(key_code),.ascii_code(ascii_code));  
 
@@ -22,5 +22,15 @@ always @(posedge clk)
     if (ascii_code!=8'h00)begin
     contador <= contador +1;end
     end
+
+always@*begin
+    if(ascii_code!=0)begin
+    interrupt=1;
+    end
+    else begin
+    interrupt=0;
+    end
+
+end
 
 endmodule

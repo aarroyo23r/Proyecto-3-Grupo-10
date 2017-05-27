@@ -6,7 +6,7 @@ module kb_code
     input wire clk, reset,
     input wire ps2d,ps2c,rd_key_code,
     output reg [7:0] key_code,
-    output reg kb_buf_empty,interrupt
+    output reg kb_buf_empty
    );
 
    localparam BRK=8'hf0; // break code, indica cuando una tecla es soltada  
@@ -51,20 +51,17 @@ module kb_code
          wait_brk:  //se espera por el FO del break code
             if (scan_done_tick && scan_out==BRK) begin
                state_next = get_code;
-               key_code=0;
-               interrupt=0;end
+               key_code=0;end
          get_code: // obtiene el seguiente scan_code
                if (scan_done_tick)
                begin
                got_code_tick=1'b1;
                state_next=get_code;
                key_code=scan_out;
-               interrupt=1;
                end
                else if(rd_key_code)begin
                state_next=wait_brk;
                key_code=0;
-               interrupt=0;
                end
       endcase
    end

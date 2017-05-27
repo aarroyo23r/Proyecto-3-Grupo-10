@@ -23,7 +23,7 @@
 module PicoBlaze(
   input  wire clk,reset,inicio,
   input	 wire[7:0]	in_port,//Entrada
-  input	 wire interrupt,//Señal de interrupcion
+  input		wire	interrupt,//Señal de interrupcion
 
   output wire	interrupt_ack,//Indica que ya se atendio la interrupcion
   output reg [7:0]EstadoPort,//Señales de salida maquina de estados general
@@ -77,7 +77,7 @@ MemoriaDeInstrucciones MemoriaDeInstrucciones_unit (
 
 //Mux entrada e interrupciones
 
-always @*begin
+always @*
 
 //Si la señal de inicio esta activa y aun no se atendio
 if (inicio && !interrupt_ack)begin
@@ -85,13 +85,9 @@ in=inicioActivo;//Señal de inicio que necesita el picoblaze
 interrupcion=inicio;//Activa la señal de interrupcion
 end
 
-else if(interrupt)begin
-in=in_port;
-interrupcion=interrupt;end
-
 else begin
-in=0;
-interrupcion=0;end
+in=in_port;
+interrupcion=interrupt;
 end
 
 
