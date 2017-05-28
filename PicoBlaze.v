@@ -14,7 +14,7 @@
 // Dependencies:
 //
 // Revision:
-// Revision 0.01 - File Created
+// Revision 0.01 - File Created      
 // Additional Comments:
 //
 //////////////////////////////////////////////////////////////////////////////////
@@ -27,6 +27,8 @@ module PicoBlaze(
 
   output wire	interrupt_ack,//Indica que ya se atendio la interrupcion
   output reg [7:0]EstadoPort,//Señales de salida maquina de estados general
+  output wire instrucciones,//Activa y desactiva las instrucciones
+  output wire resetO,//Salida del reset
   output wire sumar,restar, //Señáles de control para la suma o resta
   output wire izquierda,derecha //Señales de control para moverse entre los registros
     );
@@ -54,10 +56,16 @@ module PicoBlaze(
 
     //Señales para suma y resta
     reg suma,resta;
-    
+
     //Señales para moverse entre registros
     reg izquierdaReg,derechaReg;
 
+   //Intrucciones
+    reg instruc;
+    //Salida del reset
+    reg resetOut;
+    reg [10:0] contador=0;
+    reg duracionReset=0;
 
 //Memoria de Instrucciones
 
@@ -65,18 +73,18 @@ MemoriaDeInstrucciones MemoriaDeInstrucciones_unit (
            .address(address),.clk(clk),
            .instruction(instruction),.enable(bram_enable)
           );
-          
+
 //PicoBlaze
  kcpsm6 kcpsm6_unit(
-    .address(address),.instruction(instruction),.bram_enable(bram_enable),.in_port(in)
+    .address(address),.instruction(instruction),.bram_enable(bram_enable),.in_port(in_port)
     ,.out_port(out_port),.port_id(port_id),.write_strobe(write_strobe),.k_write_strobe(k_write_strobe)
-    ,.read_strobe(read_strobe),.interrupt(interrupcion),.interrupt_ack(interrupt_ack),.sleep(sleep)
+    ,.read_strobe(read_strobe),.interrupt(interrupt),.interrupt_ack(interrupt_ack),.sleep(sleep)
     ,.reset(reset),.clk(clk)
     );
 
 
 //Mux entrada e interrupciones
-
+/*
 always @*
 
 //Si la señal de inicio esta activa y aun no se atendio
@@ -88,7 +96,7 @@ end
 else begin
 in=in_port;
 interrupcion=interrupt;
-end
+end*/
 
 
 //Mux  y registros de salida
@@ -102,6 +110,7 @@ else if (write_strobe && port_id==8'h02 )begin
 EstadoPort<=out_port;
 teclaOutPort<=teclaOutPort;
 end
+
 
 else begin
 teclaOutPort<=0;
@@ -131,21 +140,56 @@ always @*
 if (teclaOutPort==8'h65)begin //Tecla A
 izquierdaReg=1;
 derechaReg=0;
+
 end
 else if (teclaOutPort==8'h68)begin//Tecla D
 izquierdaReg=0;
 derechaReg=1;
 end
 
+
 else begin
 izquierdaReg=0;
 derechaReg=0;
 end
 
+//Reset
+always @(posedge clk)  //Activa el contador para la duracion de la señal
+if (teclaOutPort==8'h08)begin//Tecla r
+duracionReset<=~duracionReset;
+end
+else if (contador==1043)begin
+duracionReset<=0;
+end
+else begin
+duracionReset<=duracionReset;
+end
+
+always @(posedge clk) //Duracion del reset
+if (duracionReset && contador<1044) begin
+contador<=contador+1;
+resetOut<=1;
+end
+
+else begin
+contador<=0;
+resetOut<=0;
+end
+
+//Activar o desactivar instrucciones
+always @*
+if (teclaOutPort==8'h73)begin//Tecla I
+instruc=~instruc;
+end
+
+else begin
+instruc=instruc;end
 
 //Salidas
 assign sumar=suma;
 assign restar=resta;
 assign izquierda=izquierdaReg;
 assign derecha=derechaReg;
+assign instrucciones=instruc;
+assign resetO=resetOut;
 endmodule
