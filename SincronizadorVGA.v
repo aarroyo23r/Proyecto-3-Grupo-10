@@ -1,4 +1,4 @@
-`timescale 10ns / 1ps 
+`timescale 10ns / 1ps
 
 module SincronizadorVGA(
   input wire clk,reset,
@@ -59,21 +59,21 @@ end
 always @(posedge clk)
 if (mod4_reg== 2'b11)//Cuando el contador llega a 4 genera una señal de tick y se reinicia
 begin
-pixel_tick=0;
-mod4_reg=2'b00;
+pixel_tick<=0;
+mod4_reg<=2'b00;
 end
 
 else//Si el contador no llega a ese valor sigue contando
 begin
 if (mod4_reg== 2'b10)
 begin
-pixel_tick=~pixel_tick; //Se cambio el tick al ciclo 3 del contador porque los pixeles cambian un pulso despues, asi se logra que cambien entre pixeles cada 4 ciclos de reloj (25Mhz) y no cada 5
-mod4_reg=mod4_reg+1;
+pixel_tick<=~pixel_tick; //Se cambio el tick al ciclo 3 del contador porque los pixeles cambian un pulso despues, asi se logra que cambien entre pixeles cada 4 ciclos de reloj (25Mhz) y no cada 5
+mod4_reg<=mod4_reg+1;
 end
 else
 begin
-pixel_tick=0;
-mod4_reg=mod4_reg+1;
+pixel_tick<=0;
+mod4_reg<=mod4_reg+1;
 end
 end
 

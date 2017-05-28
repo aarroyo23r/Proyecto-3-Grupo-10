@@ -48,8 +48,7 @@ reg [9:0] contadory;
 //reg [9:0] contadorycambio=7'h0;
 
 //Señales de control para la impresion de los datos de la memoria
-reg numGD=0;
-reg numGU=0;
+reg numG=0;
 reg numP=0;
 reg cuadros=0;
 reg sem=0;
@@ -146,8 +145,7 @@ always @(posedge clk)
   else if ((pixelx >= IsegundosD) && (pixelx<=IsegundosD+ancho_NumG) && (pixely >= ARsegundos) & (pixely<=ARsegundos+alto_NumG))begin
         char_addr <= SegundosD; //direccion de lo que se va a imprimir
         graficos<=1'd1;
-        numGD<=1;
-        numGU<=0;
+        numG<=1;
         dias<=0;
         anoo20<=0;
         instr<=0;
@@ -156,8 +154,7 @@ always @(posedge clk)
     else if ((pixelx >= IsegundosU) && (pixelx<=IsegundosU+ancho_NumG) && (pixely >= ARsegundos) && (pixely<=ARsegundos+alto_NumG))begin
         char_addr <= SegundosU; //direccion de lo que se va a imprimir
         graficos<=1'd1;
-        numGD<=0;
-        numGU<=1;
+        numG<=1;
         dias<=0;
         anoo20<=0;
         instr<=0;
@@ -174,8 +171,7 @@ always @(posedge clk)
   else if ((pixelx >= IminutosD) && (pixelx<=IminutosD+ancho_NumG) && (pixely >= ARminutos) && (pixely<=ARminutos+alto_NumG))begin
       char_addr <= minutosD; //direccion de lo que se va a imprimir
       graficos<=1'd1;
-      numGD<=1;
-      numGU<=0;
+      numG<=1;
       dias<=0;
       anoo20<=0;
       instr<=0;
@@ -184,8 +180,7 @@ always @(posedge clk)
   else if ((pixelx >= IminutosU) && (pixelx<=IminutosU+ancho_NumG) && (pixely >= ARminutos) && (pixely<=ARminutos+alto_NumG))begin
       char_addr <= minutosU; //direccion de lo que se va a imprimir
       graficos<=1'd1;
-      numGD<=0;
-      numGU<=1;
+      numG<=1;
       dias<=0;
       anoo20<=0;
       instr<=0;
@@ -201,8 +196,7 @@ always @(posedge clk)
  else if ((pixelx >= IhorasD) && (pixelx<=IhorasD+ancho_NumG) && (pixely >= ARhoras) && (pixely<=ARhoras+alto_NumG))begin
     char_addr <= horasD; //direccion de lo que se va a imprimir
     graficos<=1'd1;
-    numGD<=1;
-    numGU<=0;
+    numG<=1;
     dias<=0;
     anoo20<=0;
     instr<=0;
@@ -213,8 +207,7 @@ always @(posedge clk)
     else if ((pixelx >= IhorasU) && (pixelx<=IhorasU+ancho_NumG) && (pixely >= ARhoras) && (pixely<=ARhoras+alto_NumG))begin
         char_addr <= horasU;//direccion de lo que se va a imprimir
         graficos<=1'd1;
-        numGD<=0;
-        numGU<=1;
+        numG<=1;
         dias<=0;
         anoo20<=0;
         instr<=0;
@@ -234,8 +227,7 @@ always @(posedge clk)
    else if ((pixelx >= IsemanaU) && (pixelx<=IsemanaU+ancho_NumP) && (pixely >= ARsemana) && (pixely<=ARsemana+alto_NumP))begin
         char_addr <= numeroSemanaU;//direccion de lo que se va a imprimir
         graficos<=1'd1;
-        numGD<=0;
-        numGU<=0;
+        numG<=0;
         numP=1;
         dias<=0;
         anoo20<=0;
@@ -245,8 +237,7 @@ always @(posedge clk)
    else if ((pixelx >= IsemanaD) && (pixelx<=IsemanaD+ancho_NumP) && (pixely >= ARsemana) && (pixely<=ARsemana+alto_NumP))begin
         char_addr <= numeroSemanaD;//direccion de lo que se va a imprimir
         graficos<=1'd1;
-        numGD<=0;
-        numGU<=0;
+        numG<=0;
         numP=1;
         dias<=0;
         anoo20<=0;
@@ -265,8 +256,7 @@ always @(posedge clk)
 //Semana
 else if ((pixelx >= textoSemana) && (pixelx<=textoSemana+63) && (pixely >= ARsemana) && (pixely<=ARsemana+14))begin
    graficos<=1'd1;
-   numGD<=0;
-   numGU<=0;
+   numG<=0;
    numP=0;
    cuadros<=0;
    sem<=1;
@@ -279,8 +269,7 @@ else if ((pixelx >= textoSemana) && (pixelx<=textoSemana+63) && (pixely >= ARsem
 //Cronometro
 else if ((pixelx >= textoCronometro) && (pixelx<=textoCronometro+101) && (pixely >= ARano) && (pixely<=ARano+alto_NumP))begin
    graficos<=1'd1;
-   numGD<=0;
-   numGU<=0;
+   numG<=0;
    cuadros<=0;
    numP=0;
    sem<=0;
@@ -295,8 +284,7 @@ else if ((pixelx >= textoCronometro) && (pixelx<=textoCronometro+101) && (pixely
      else if ((pixelx >= 472) && (pixelx<=486) && (pixely >= ARanoo+1) && (pixely<=ARanoo+alto_NumP+1))begin
      char_addr <= 7'h30;//direccion de lo que se va a imprimir
        graficos<=1;
-       numGD<=0;
-       numGU<=0;
+       numG<=0;
        cuadros<=0;
        numP=0;
        sem<=0;
@@ -312,8 +300,7 @@ else if ((pixelx >= textoCronometro) && (pixelx<=textoCronometro+101) && (pixely
  else if ((pixelx >= cronoHoras) && (pixelx<cronoHoras+ancho_NumP) && (pixely >= ARano+2) & (pixely<=ARano+alto_NumP))begin
      char_addr <= horasDT; //direccion de lo que se va a imprimir
      graficos<=1;
-     numGD<=0;
-     numGU<=0;
+     numG<=0;
      cuadros<=0;
      sem<=0;
      numP<=1;
@@ -325,8 +312,7 @@ else if ((pixelx >= textoCronometro) && (pixelx<=textoCronometro+101) && (pixely
  else if ((pixelx >= cronoHoras+ancho_NumP) && (pixelx<cronoHoras+ 2*ancho_NumP) && (pixely >= ARano+2) && (pixely<=ARano+alto_NumP))begin
      char_addr <= horasUT; //direccion de lo que se va a imprimir
      graficos<=1;
-     numGD<=0;
-     numGU<=0;
+     numG<=0;
      cuadros<=0;
      sem<=0;
      numP<=1;
@@ -347,8 +333,7 @@ else if ((pixelx >= textoCronometro) && (pixelx<=textoCronometro+101) && (pixely
 else if ((pixelx >= cronoMinutos) && (pixelx<cronoMinutos+ancho_NumP) && (pixely >= ARano+2) && (pixely<=ARano+alto_NumP))begin
    char_addr <= minutosDT; //direccion de lo que se va a imprimir
    graficos<=1;
-   numGD<=0;
-   numGU<=0;
+   numG<=0;
    cuadros<=0;
    sem<=0;
    numP<=1;
@@ -360,8 +345,7 @@ else if ((pixelx >= cronoMinutos) && (pixelx<cronoMinutos+ancho_NumP) && (pixely
 else if ((pixelx >= cronoMinutos+ancho_NumP ) && (pixelx<cronoMinutos+ 2*ancho_NumP) && (pixely >= ARano+2) && (pixely<=ARano+alto_NumP))begin
    char_addr <= minutosUT; //direccion de lo que se va a imprimir
    graficos<=1;
-   numGD<=0;
-   numGU<=0;
+   numG<=0;
    cuadros<=0;
    sem<=0;
    numP<=1;
@@ -380,8 +364,7 @@ else if ((cursor==8'h42) && ( Escribir|ProgramarCrono) && (pixelx >= cronoMinuto
 else if ((pixelx >= cronoSegundos ) && (pixelx<cronoSegundos+ancho_NumP) && (pixely >= ARano+2) && (pixely<=ARano+alto_NumP))begin
  char_addr <= SegundosDT; //direccion de lo que se va a imprimir
  graficos<=1;
- numGD<=0;
- numGU<=0;
+ numG<=0;
  cuadros<=0;
  sem<=0;
  numP<=1;
@@ -395,8 +378,7 @@ else if ((pixelx >= cronoSegundos ) && (pixelx<cronoSegundos+ancho_NumP) && (pix
  else if ((pixelx >= cronoSegundos+ancho_NumP ) && (pixelx<cronoSegundos+ 2*ancho_NumP) && (pixely >= ARano+2) && (pixely<=ARano+alto_NumP))begin
      char_addr <= SegundosUT;//direccion de lo que se va a imprimir
      graficos<=1;
-     numGD<=0;
-     numGU<=0;
+     numG<=0;
      cuadros<=0;
      sem<=0;
      numP<=1;
@@ -419,11 +401,10 @@ else if ((pixelx >= cronoSegundos ) && (pixelx<cronoSegundos+ancho_NumP) && (pix
 //**************************************************************************************************
 //Dia
 
-        else if ((pixelx >= IdiaD) && (pixelx<=IdiaD+60) && (pixely >= ARano) && (pixely<=ARano+alto_NumP))begin
+        else if ((pixelx >= IdiaD) && (pixelx<=513) && (pixely >= ARano) && (pixely<=ARano+alto_NumP))begin
             char_addr <= diaSemanaU;
             graficos<=1;
-            numGD<=0;
-            numGU<=0;
+            numG<=0;
             cuadros<=0;
             sem<=0;
             numP<=0;
@@ -447,8 +428,7 @@ else if ((pixelx >= cronoSegundos ) && (pixelx<cronoSegundos+ancho_NumP) && (pix
         else if ((pixelx >= IanoD) && (pixelx<=IanoD+ancho_NumP) && (pixely >= ARanoo) && (pixely<=ARanoo+alto_NumP-1))begin
             char_addr <= anoD;//direccion de lo que se va a imprimir
             graficos<=1;
-            numGD<=0;
-            numGU<=0;
+            numG<=0;
             cuadros<=0;
             sem<=0;
             numP<=1;
@@ -462,8 +442,7 @@ else if ((pixelx >= cronoSegundos ) && (pixelx<cronoSegundos+ancho_NumP) && (pix
         else if ((pixelx >= IanoU) && (pixelx<=IanoU+ancho_NumP) && (pixely >= ARanoo) && (pixely<=ARanoo+alto_NumP-1))begin
             char_addr <= anoU;//direccion de lo que se va a imprimir
             graficos<=1;
-            numGD<=0;
-            numGU<=0;
+            numG<=0;
             cuadros<=0;
             sem<=0;
             numP<=1;
@@ -483,11 +462,10 @@ else if ((pixelx >= cronoSegundos ) && (pixelx<cronoSegundos+ancho_NumP) && (pix
 
 
 //Fecha
-          else if ((pixelx >= IfechaD) && (pixelx<=IfechaD+ancho_NumP) && (pixely >= ARfecha) && (pixely<=ARfecha+alto_NumP))begin
+          else if ((pixelx >= IfechaD) && (pixelx<=IfechaD+ancho_NumP) && (pixely >= ARfecha) && (pixely<=ARfecha+alto_NumP-3))begin
               char_addr <= fechaD;//direccion de lo que se va a imprimir
               graficos<=1;
-              numGD<=0;
-              numGU<=0;
+              numG<=0;
               cuadros<=0;
               sem<=0;
               numP<=1;
@@ -497,11 +475,10 @@ else if ((pixelx >= cronoSegundos ) && (pixelx<cronoSegundos+ancho_NumP) && (pix
               instr<=0;
               dp<=1'd1;end
 
-          else if ((pixelx >= IfechaU) && (pixelx<=IfechaU+ancho_NumP) && (pixely >= ARfecha) && (pixely<=ARfecha+alto_NumP))begin
+          else if ((pixelx >= IfechaU) && (pixelx<=IfechaU+ancho_NumP) && (pixely >= ARfecha) && (pixely<=ARfecha+alto_NumP-3))begin
               char_addr <= fechaU;//direccion de lo que se va a imprimir
               graficos<=1;
-              numGD<=0;
-              numGU<=0;
+              numG<=0;
               cuadros<=0;
               sem<=0;
               numP<=1;
@@ -521,11 +498,10 @@ else if ((pixelx >= cronoSegundos ) && (pixelx<cronoSegundos+ancho_NumP) && (pix
 
 
 //Mes
-           else if ((pixelx >= ImesD) && (pixelx<=ImesD+ancho_NumP) && (pixely >= ARfecha) && (pixely<=ARfecha+alto_NumP))begin
+           else if ((pixelx >= ImesD) && (pixelx<=ImesD+ancho_NumP) && (pixely >= ARfecha) && (pixely<=ARfecha+alto_NumP-3))begin
                char_addr <=mesD;//direccion de lo que se va a imprimir
                graficos<=1;
-               numGD<=0;
-               numGU<=0;
+               numG<=0;
                cuadros<=0;
                sem<=0;
                numP<=1;
@@ -535,11 +511,10 @@ else if ((pixelx >= cronoSegundos ) && (pixelx<cronoSegundos+ancho_NumP) && (pix
                instr<=0;
                dp<=1'd1;end
 
-           else if ((pixelx >= ImesU) && (pixelx<=ImesU+ancho_NumP) && (pixely >= ARfecha) && (pixely<=ARfecha+alto_NumP))begin
+           else if ((pixelx >= ImesU) && (pixelx<=ImesU+ancho_NumP) && (pixely >= ARfecha) && (pixely<=ARfecha+alto_NumP-3))begin
                char_addr <= mesU;//direccion de lo que se va a imprimir
                graficos<=1;
-               numGD<=0;
-               numGU<=0;
+               numG<=0;
                cuadros<=0;
                sem<=0;
                numP<=1;
@@ -568,25 +543,25 @@ begin
 //Instrucciones
 //..............................................................................
 
-if ((instrucciones) && (pixely >=42) && (pixely<=124))begin
+if ((instrucciones) && (pixely >=50) && (pixely<=125) && (50<pixelx) && (pixelx<567) )begin
 cuadros<=0;
-numGD<=0;
-numGU<=0;
+numG<=0;
 numP=0;
 sem<=0;
 cron<=0;
+dias<=0;
 anoo20<=0;
 graficos<=1'd1;
 instr<=1;
 dp=1'd1; end
 
 //Tecla para acticar las instrucciones
-else if ((pixely >= 42) && (pixely<=124) && (pixelx>556))begin
+else if ((pixely >= 423) && (pixely<=466) && (pixelx>559))begin
 cuadros<=0;
-numGD<=0;
-numGU<=0;
+numG<=0;
 numP=0;
 sem<=0;
+dias<=0;
 cron<=0;
 anoo20<=0;
 graficos<=1'd1;
@@ -601,10 +576,9 @@ dp=1'd1; end
 //cuadros
 //..............................................................................
 
-else if ((pixely >= 10'd141) && (pixely<=173))begin
+else if ((pixely >= 10'd141) && (pixely<=157))begin
 cuadros<=1;
-numGD<=0;
-numGU<=0;
+numG<=0;
 numP=0;
 sem<=0;
 cron<=0;
@@ -614,38 +588,37 @@ instr<=0;
 dp=1'd1; end
 
 //Parte constante
-else if ((pixelx <=28) && (pixely >= 174) && (pixely <= 284))begin
+else if ((pixelx <=28) && (pixely >= 158) && (pixely <= 264))begin
 dp=1'd1;color_addr=3'd1;graficos<=1'd0;memInt=1'd1;end
-else if ((pixelx <=29) && (pixely >= 174)  && (pixely <= 284)) begin
+else if ((pixelx <=29) && (pixely >= 158)  && (pixely <= 264)) begin
 dp=1'd1;color_addr=3'd5;graficos<=1'd0;memInt=1'd1;end
-else if ((pixelx <=212) && (pixely >= 174)  && (pixely <= 284)) begin
+else if ((pixelx <=212) && (pixely >= 158)  && (pixely <= 264)) begin
 dp=1'd1;color_addr=3'd3;graficos<=1'd0;memInt=1'd1;end
-else if ((pixelx <=213) && (pixely >= 174)  && (pixely <= 284)) begin
+else if ((pixelx <=213) && (pixely >= 158)  && (pixely <= 264)) begin
 dp=1'd1;color_addr=3'd5;graficos<=1'd0;memInt=1'd1;end
-else if ((pixelx <=228) && (pixely >= 174)  && (pixely <= 284)) begin
+else if ((pixelx <=228) && (pixely >= 158)  && (pixely <= 264)) begin
 dp=1'd1;color_addr=3'd1;graficos<=1'd0;memInt=1'd1;end
-else if ((pixelx <=229) && (pixely >= 174)  && (pixely <= 284)) begin
+else if ((pixelx <=229) && (pixely >= 158)  && (pixely <= 264)) begin
 dp=1'd1;color_addr=3'd5;graficos<=1'd0;memInt=1'd1;end
-else if ((pixelx <=412) && (pixely >= 174 ) && (pixely <= 284)) begin
+else if ((pixelx <=412) && (pixely >= 158 ) && (pixely <= 264)) begin
 dp=1'd1;color_addr=3'd3;graficos<=1'd0;memInt=1'd1;end
-else if ((pixelx <=413) && (pixely >= 174)  && (pixely <= 284)) begin
+else if ((pixelx <=413) && (pixely >= 158)  && (pixely <= 264)) begin
 dp=1'd1;color_addr=3'd5;graficos<=1'd0;memInt=1'd1;end
-else if ((pixelx <=428) && (pixely >= 174)  && (pixely <= 284)) begin
+else if ((pixelx <=428) && (pixely >= 158)  && (pixely <= 264)) begin
 dp=1'd1;color_addr=3'd1;graficos<=1'd0;memInt=1'd1;end
-else if ((pixelx <=429) && (pixely >= 174)  && (pixely <= 284)) begin
+else if ((pixelx <=429) && (pixely >= 158)  && (pixely <= 264)) begin
 dp=1'd1;color_addr=3'd5;graficos<=1'd0;memInt=1'd1;end
-else if ((pixelx <=612) && (pixely >= 174)  && (pixely <= 284)) begin
+else if ((pixelx <=612) && (pixely >= 158)  && (pixely <= 264)) begin
 dp=1'd1;color_addr=3'd3;graficos<=1'd0;memInt=1'd1;end
-else if ((pixelx <=613) && (pixely >= 174)  && (pixely <= 284)) begin
+else if ((pixelx <=613) && (pixely >= 158)  && (pixely <= 264)) begin
 dp=1'd1;color_addr=3'd5;graficos<=1'd0;memInt=1'd1;end
-else if ((pixelx <=800) && (pixely >= 174)  && (pixely <= 284)) begin
+else if ((pixelx <=800) && (pixely >= 158)  && (pixely <= 264)) begin
 dp=1'd1;color_addr=3'd1;graficos<=1'd0;memInt=1'd1;end
 
 
-else if ((pixely >=285) && (pixely<=10'd348))begin
+else if ((pixely >=265) && (pixely<=10'd348))begin
 cuadros<=1;
-numGD<=0;
-numGU<=0;
+numG<=0;
 numP=0;
 sem<=0;
 cron<=0;
@@ -686,22 +659,26 @@ dp<=1'd1; end
 
 
 else begin
-color_addr<=4'd0;// Color de lo que se va a imprimir
+color_addr<=4'd0;
 graficos<=1'd0;
-numGD<=0;
-numGU<=0;
+numG<=0;
 cuadros<=0;
-dp<=1'd1; end
+numP<=0;
+dp<=1'd0; end
 
 
 end
 
-//Logica para centrar los datos
+//Logica para centrar los numeros grandes
 //==============================================================================
 always @*
 
-if (numGU | numGD)begin
 
+if (dias) begin
+contadorx=pixelx[6:0];
+end
+
+else if (numG)begin
 
  if (pixelx< 10'd212) begin
 contadorx=(pixelx[5:0] + 6'd5);
@@ -721,10 +698,6 @@ end
 
 end
 
-else if (dias) begin
-contadorx=pixelx[6:0];
-end
-
 else begin
 contadorx=pixelx[2:0];
 end
@@ -734,26 +707,7 @@ end
 always @*
 
 //Numeros Grandes
-if (numGU) begin
-contadory=pixely-192; //Correccion para que pixel y concuerde con los datos de la memoria
-case (char_addr)
-7'h30:contadorxcambio=0;
-7'h31:contadorxcambio=67;
-7'h32:contadorxcambio=127;
-7'h33:contadorxcambio=192;
-7'h34:contadorxcambio=253;
-7'h35:contadorxcambio=320;
-7'h36:contadorxcambio=383;
-7'h37:contadorxcambio=450;
-7'h38:contadorxcambio=511;
-7'h39:contadorxcambio=576;
-default: contadorxcambio = 0;
-endcase
-
-address=contadorx+(contadory*640)+contadorxcambio;
-end
-
-else if (numGD) begin
+if (numG) begin
 contadory=pixely-192; //Correccion para que pixel y concuerde con los datos de la memoria
 case (char_addr)
 7'h30:contadorxcambio=0;
@@ -846,8 +800,14 @@ end
 
 //Instrucciones
 else if(instr) begin
-contadory=pixely+132;//111
-address=pixelx+(contadory*640);//Logica para sacar los datos de la memoria
+if (pixely >= 423) begin
+contadory=pixely-254;//111
+address=pixelx+(contadory*640)+15;//Logica para sacar los datos de la memoria
+end
+else begin
+contadory=pixely+108;//111
+address=pixelx+(contadory*640-50);//Logica para sacar los datos de la memoria
+end
 end
 //20 del Año
 else if(anoo20) begin
