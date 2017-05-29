@@ -14,7 +14,7 @@
 // Dependencies:
 //
 // Revision:
-// Revision 0.01 - File Created      
+// Revision 0.01 - File Created
 // Additional Comments:
 //
 //////////////////////////////////////////////////////////////////////////////////
@@ -137,12 +137,12 @@ end
 
 //Deco Izquierda derecha
 always @*
-if (teclaOutPort==8'h65)begin //Tecla A
+if (teclaOutPort==8'h41)begin //Tecla A
 izquierdaReg=1;
 derechaReg=0;
 
 end
-else if (teclaOutPort==8'h68)begin//Tecla D
+else if (teclaOutPort==8'h44)begin//Tecla D
 izquierdaReg=0;
 derechaReg=1;
 end
@@ -178,7 +178,7 @@ end
 
 //Activar o desactivar instrucciones
 always @*
-if (teclaOutPort==8'h73)begin//Tecla I
+if (teclaOutPort==8'h49)begin//Tecla I
 instruc=~instruc;
 end
 

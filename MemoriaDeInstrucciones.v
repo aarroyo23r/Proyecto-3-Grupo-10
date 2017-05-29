@@ -80,7 +80,7 @@ assign enable_b = 1'b0;
 assign we_b = 4'h0;
 assign clk_b = 1'b0;
 //
-//
+// 
 RAMB18E1 # ( .READ_WIDTH_A              (18),
              .WRITE_WIDTH_A             (18),
              .DOA_REG                   (0),
@@ -102,7 +102,7 @@ RAMB18E1 # ( .READ_WIDTH_A              (18),
              .SIM_DEVICE                ("7SERIES"),
              .INIT_00                   (256'hD1022012D5432019D5452019D502201FD5528001150217081404130212011100),
              .INIT_01                   (256'hD701200715002012D3022007D2022007201DD0031001D4026007D543201BD550),
-             .INIT_02                   (256'hD60190010560202FD673202FD668202FD665202FD653202FD657960320071500),
+             .INIT_02                   (256'hD60190010560202FD649202FD644202FD641202FD653202FD657960320071500),
              .INIT_03                   (256'h0000000000000000000000000000000000000000000000000000000000009001),
              .INIT_04                   (256'h0000000000000000000000000000000000000000000000000000000000000000),
              .INIT_05                   (256'h0000000000000000000000000000000000000000000000000000000000000000),
@@ -176,9 +176,9 @@ RAMB18E1 # ( .READ_WIDTH_A              (18),
              .ENARDEN                   (enable),
              .CLKARDCLK                 (clk),
              .DOADO                     (data_out_a[15:0]),
-             .DOPADOP                   (data_out_a[17:16]),
+             .DOPADOP                   (data_out_a[17:16]), 
              .DIADI                     (data_in_a[15:0]),
-             .DIPADIP                   (data_in_a[17:16]),
+             .DIPADIP                   (data_in_a[17:16]), 
              .WEA                       (2'b00),
              .REGCEAREGCE               (1'b0),
              .RSTRAMARSTRAM             (1'b0),
@@ -187,9 +187,9 @@ RAMB18E1 # ( .READ_WIDTH_A              (18),
              .ENBWREN                   (enable_b),
              .CLKBWRCLK                 (clk_b),
              .DOBDO                     (data_out_b[15:0]),
-             .DOPBDOP                   (data_out_b[17:16]),
+             .DOPBDOP                   (data_out_b[17:16]), 
              .DIBDI                     (data_in_b[15:0]),
-             .DIPBDIP                   (data_in_b[17:16]),
+             .DIPBDIP                   (data_in_b[17:16]), 
              .WEBWE                     (we_b),
              .REGCEB                    (1'b0),
              .RSTRAMB                   (1'b0),
@@ -203,4 +203,4 @@ endmodule
 // END OF FILE PicoBlaze.v
 //
 ////////////////////////////////////////////////////////////////////////////////////
-////////////////
+

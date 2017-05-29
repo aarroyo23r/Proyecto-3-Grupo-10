@@ -51,9 +51,16 @@ end record;
 type Codes_Table_t is array (natural range <>) of Code_r;
 ---Aqui definimos los valores en hexadecimal a enviar. Pongan los de los numeros dentro de esta tabla
 constant Codes_Table : Codes_Table_t -- if you need more codes: just add them!
-:= ( (x"24",'0'), (x"F0",'0'), (x"2A",'0'), (x"50",'0'),
-(x"F0",'0'), (x"2B",'0'), (x"24",'0'), (x"F0",'0'),
-(x"24",'0'));
+:= ( (x"4B",'0'), (x"F0",'0'), (x"4B",'0'), (x"24",'0'),
+(x"F0",'0'), (x"24",'0'), (x"4B",'0'), (x"F0",'0'),
+(x"4B",'0'), (x"4D",'0'), (x"F0",'0'),
+(x"4D",'0'), (x"21",'0'), (x"F0",'0'),
+(x"21",'0')
+, (x"57",'0'), (x"F0",'0'),
+(x"57",'0'), (x"53",'0'), (x"F0",'0'),
+(x"53",'0'), (x"41",'0'), (x"F0",'0'),
+(x"41",'0'), (x"44",'0'), (x"F0",'0'),
+(x"44",'0'));
 -- in Verilog, the function below is just : ^V ;-)
 function Even (V : std_logic_vector) return std_logic is
 variable p : std_logic := '0';
@@ -72,7 +79,7 @@ begin
 -- Scan_Err (que indica que ha habido un error de Paridad, O que hay un desborde, porque se tiene un dato listo para salir, pero
 -- el amo no lo ha leido aun, y ya llego un dato nuevo por el teclado
 -- No obstante, es recomendable dejarlas para mejorar el control y saber si su controlador esta funcionando
--- Para instanciar un modulo Verilog en un TestBench en VHDL, vayan a 
+-- Para instanciar un modulo Verilog en un TestBench en VHDL, vayan a
 --https://www.xilinx.com/itp/xilinx10/isehelp/ism_p_instantiating_verilog_module_mixedlang.htm
 -- El orden de conexion en VHDL sigue el mismo orden que VErilog. Primero va el pin del modulo instanciado, y luego el alambre o sennak
 --ak que estariammos alambrando
@@ -167,4 +174,3 @@ wait for Period;
 DoRead <= '0';
 end process Host;
 end Test;
-
