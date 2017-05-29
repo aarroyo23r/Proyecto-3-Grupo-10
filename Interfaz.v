@@ -23,7 +23,7 @@
 module Interfaz(
     input wire clk,reset,resetSync,
     input wire instrucciones,ProgramarCrono,ring,//Señales de control
- //  input wire [7:0] cursor,//Direccion del cursor
+    input wire [7:0] cursor,//Direccion del cursor
     input wire Escribir,//Control escritura
     output wire  [11:0] rgbO,//Salida de color
     output wire hsync,vsync,//Sincronizacion de la VGA
@@ -91,9 +91,13 @@ wire [2:0] color_addr;    //Direccion del color
 reg [11:0] color;
 reg [11:0] colorMux;
 
-
+/*
+//ring
+reg [26:0] contador;
+reg alternaColor;
+reg [11:0] colorAlarma;
 //Cursor ***************
-
+*/
 
 //Salida VGA***********
 reg [11:0] rgb;
@@ -274,8 +278,26 @@ case (color_addr) // combinación de colores seleccionados de acuerdo al switch,
 default: color = 12'h111;
 
 endcase
+/*
+//Color del ring
+always @(posedge clk) 
 
+if (ring && contador<100000000)begin //Duracion 1s cada color
+  alternaColor<=alternaColor;
+  contador<=contador+1;
+    if (alternaColor) begin
+            colorAlarma<=12'hf00;
+    end
 
+    else begin
+             colorAlarma<=color;
+    end
+
+else begin
+alternaColor<=~alternaColor;
+contador<=0;
+end
+*/
 //Mux Salida color
 
 always @(posedge clk)
@@ -285,7 +307,7 @@ if (graficos)begin
 colorMux<=datoMemoria;
 end
 /*
-else if (ring==1  && (pixely >= 10'd473) && (pixely<= 10'd480) ) begin
+else if (ring  && (pixely >= 10'd473) && (pixely<= 10'd480) ) begin
 colorMux= colorAlarma; end //Cambio de color
 */
 else begin

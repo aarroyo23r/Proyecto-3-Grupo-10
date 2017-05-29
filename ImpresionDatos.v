@@ -90,7 +90,7 @@ localparam IhorasU=10'd123;
 localparam ARhoras=10'd197;
 
 //Dia
-localparam IdiaD=10'd449;//511
+localparam IdiaD=10'd447;//511
 
 //Ano
 localparam IanoD=486;
@@ -159,14 +159,14 @@ always @(posedge clk)
         anoo20<=0;
         instr<=0;
         dp<=1'd1;end
-/*
+
     //Cursor Segundos
 
     else if ((cursor==8'h21) &&( Escribir) && (pixelx >= IsegundosD) && (pixelx<=IsegundosD+anchoCursor) && (pixely >= ARsegundos+alto_NumG + 10'd4) && (pixely<=ARsegundos+alto_NumG + 10'd6))begin
         color_addr<=4'd2;// Color de lo que se va a imprimir
         graficos<=1'd0;
         dp<=1'd1;end
-*/
+
 //Minutos
   else if ((pixelx >= IminutosD) && (pixelx<=IminutosD+ancho_NumG) && (pixely >= ARminutos) && (pixely<=ARminutos+alto_NumG))begin
       char_addr <= minutosD; //direccion de lo que se va a imprimir
@@ -185,13 +185,13 @@ always @(posedge clk)
       anoo20<=0;
       instr<=0;
       dp<=1'd1;end
-/*
+
 //Cursor Minutos
    else if ((cursor==8'h22) &&( Escribir) && (pixelx >= IminutosD) && (pixelx<=IminutosD+anchoCursor) && (pixely >= ARminutos+alto_NumG + 10'd4) && (pixely<=ARminutos+alto_NumG+ 10'd6))begin
       color_addr<=4'd2;
       graficos<=1'd0;
       dp<=1'd1;end
-*/
+
 //Horas
  else if ((pixelx >= IhorasD) && (pixelx<=IhorasD+ancho_NumG) && (pixely >= ARhoras) && (pixely<=ARhoras+alto_NumG))begin
     char_addr <= horasD; //direccion de lo que se va a imprimir
@@ -213,14 +213,14 @@ always @(posedge clk)
         instr<=0;
         dp<=1'd1;end
 
-        /*
+
 //Cursor Horas
 
      else if ((cursor==8'h23) &&( Escribir) && (pixelx >= IhorasD) && (pixelx<=IhorasD+anchoCursor) && (pixely >= ARhoras+alto_NumG + 10'd4) && (pixely<=ARhoras+alto_NumG+ 10'd6))begin
         color_addr<=4'd2;// Color de lo que se va a imprimir
         graficos<=1'd0;
         dp<=1'd1;end//Tamaño de fuente
-        */
+
 
 
 //Semana
@@ -244,14 +244,14 @@ always @(posedge clk)
         instr<=0;
         dp<=1'd1;end
 
-/*
+
 //Cursor Semana
-     else if ((cursor==8'h28) &&( Escribir) && (pixelx >= IsemanaD) && (pixelx<=DsemanaU) && (pixely >= ABsemana + 10'd2) && (pixely<=ABsemana + 10'd3))begin
+     else if ((cursor==8'h28) &&( Escribir) && (pixelx >= IsemanaD) && (pixelx<=IsemanaD+2*ancho_NumP) && (pixely >= ARsemana +alto_NumP+ 10'd2) && (pixely<=ARsemana +alto_NumP+ 10'd3))begin
         color_addr<=4'd2;// Color de lo que se va a imprimir
         graficos<=1'd0;
         dp<=1'd1;end
 
-*/
+
 //Texto
 //Semana
 else if ((pixelx >= textoSemana) && (pixelx<=textoSemana+63) && (pixely >= ARsemana) && (pixely<=ARsemana+14))begin
@@ -321,13 +321,13 @@ else if ((pixelx >= textoCronometro) && (pixelx<=textoCronometro+101) && (pixely
      instr<=0;
      dp<=1'd1;end
 
-/*     //Cursor Horas Crono
+     //Cursor Horas Crono
 
-  else if ((cursor==8'h43) &&( Escribir|ProgramarCrono) && (pixelx >= cronoHoras) && (pixelx<=cronoHoras+ 2*cambioMozaico) && (pixely >= ABmes + 10'd2) && (pixely<=ABmes+ 10'd3))begin
+  else if ((cursor==8'h43) &&( Escribir|ProgramarCrono) && (pixelx >= cronoHoras) && (pixelx<=cronoHoras+ 2*ancho_NumP) && (pixely >= ARano+alto_NumP + 10'd2) && (pixely<=ARano+alto_NumP+ 10'd3))begin
      color_addr<=4'd2;// Color de lo que se va a imprimir
      graficos<=1'd0;
      dp<=1'd1;end
-*/
+
 
 //Minutos Crono
 else if ((pixelx >= cronoMinutos) && (pixelx<cronoMinutos+ancho_NumP) && (pixely >= ARano+2) && (pixely<=ARano+alto_NumP))begin
@@ -354,12 +354,12 @@ else if ((pixelx >= cronoMinutos+ancho_NumP ) && (pixelx<cronoMinutos+ 2*ancho_N
    instr<=0;
    dp<=1'd1;end
 
-/*
-else if ((cursor==8'h42) && ( Escribir|ProgramarCrono) && (pixelx >= cronoMinutos) && (pixelx<=cronoMinutos+ 2*cambioMozaico) && (pixely >= ABmes + 10'd2) && (pixely<=ABmes+ 10'd3))begin
+
+else if ((cursor==8'h42) && ( Escribir|ProgramarCrono) && (pixelx >= cronoMinutos) && (pixelx<=cronoMinutos+ 2*ancho_NumP) && (pixely >= ARano+alto_NumP + 10'd2) && (pixely<=ARano+alto_NumP+ 10'd3))begin
    color_addr<=4'd2;// Color de lo que se va a imprimir
    graficos<=1'd0;
    dp<=1'd1;end//Tamaño de fuente
-*/
+
 //Segundos crono
 else if ((pixelx >= cronoSegundos ) && (pixelx<cronoSegundos+ancho_NumP) && (pixely >= ARano+2) && (pixely<=ARano+alto_NumP))begin
  char_addr <= SegundosDT; //direccion de lo que se va a imprimir
@@ -387,12 +387,12 @@ else if ((pixelx >= cronoSegundos ) && (pixelx<cronoSegundos+ancho_NumP) && (pix
      instr<=0;
      dp<=1'd1;end
 
-/*
-     else if ((cursor==8'h41) &&( Escribir|ProgramarCrono) && (pixelx >= cronoSegundos) && (pixelx<=cronoSegundos+ 2*cambioMozaico) && (pixely >= ABmes + 10'd2) && (pixely<=ABmes+ 10'd3))begin
+
+     else if ((cursor==8'h41) &&( Escribir|ProgramarCrono) && (pixelx >= cronoSegundos) && (pixelx<=cronoSegundos+ 2*ancho_NumP) && (pixely >= ARano+alto_NumP + 10'd2) && (pixely<=ARano+alto_NumP+ 10'd3))begin
      color_addr<=4'd2;// Color de lo que se va a imprimir
      graficos<=1'd0;
      dp<=1'd1;end//Tamaño de fuente
-*/
+
 
 
 
@@ -401,7 +401,7 @@ else if ((pixelx >= cronoSegundos ) && (pixelx<cronoSegundos+ancho_NumP) && (pix
 //**************************************************************************************************
 //Dia
 
-        else if ((pixelx >= IdiaD) && (pixelx<=513) && (pixely >= ARano) && (pixely<=ARano+alto_NumP))begin
+        else if ((pixelx >= IdiaD) && (pixelx<=IdiaD+64) && (pixely >= ARano) && (pixely<=ARano+alto_NumP))begin //513
             char_addr <= diaSemanaU;
             graficos<=1;
             numG<=0;
@@ -415,14 +415,14 @@ else if ((pixelx >= cronoSegundos ) && (pixelx<cronoSegundos+ancho_NumP) && (pix
             dp<=1'd1;end
 
 
-            /*
+
 //Cursor Dia
-      else if ((cursor==8'h27) &&( Escribir) && (pixelx >= IdiaD) && (pixelx<=DdiaU) && (pixely >= ARano+alto_NumP + 10'd2) && (pixely<=ARano+alto_NumP + 10'd3))begin
+      else if ((cursor==8'h27) &&( Escribir) && (pixelx >= IdiaD) && (pixelx<=533) && (pixely >= ARano+alto_NumP + 10'd2) && (pixely<=ARano+alto_NumP + 10'd3))begin
             color_addr<=4'd2;// Color de lo que se va a imprimir
             graficos<=1'd0;
             dp<=1'd1;end
 
-            */
+
 
 //Año
         else if ((pixelx >= IanoD) && (pixelx<=IanoD+ancho_NumP) && (pixely >= ARanoo) && (pixely<=ARanoo+alto_NumP-1))begin
@@ -452,13 +452,13 @@ else if ((pixelx >= cronoSegundos ) && (pixelx<cronoSegundos+ancho_NumP) && (pix
             instr<=0;
             dp<=1'd1;end
 
-/* //Cursor Año
-        else if ((cursor==8'h26) &&( Escribir) && (pixelx >= IanoU+ancho_NumP) && (pixelx<=DanoU) && (pixely >= ARanoo+alto_NumP + 10'd2) && (pixely<=ARanoo+alto_NumP + 10'd3))begin
+ //Cursor Año
+        else if ((cursor==8'h26) &&( Escribir) && (pixelx >= IanoD) && (pixelx<=IanoD +2*ancho_NumP) && (pixely >= ARanoo+alto_NumP + 10'd2) && (pixely<=ARanoo+alto_NumP + 10'd3))begin
             char_addr <= 7'h0a; //direccion de lo que se va a imprimir
             graficos<=1'd0;
             dp<=1'd1;end
 
-*/
+
 
 
 //Fecha
@@ -488,12 +488,12 @@ else if ((pixelx >= cronoSegundos ) && (pixelx<cronoSegundos+ancho_NumP) && (pix
               instr<=0;
               dp<=1'd1;end
 
-/*
-          else if ((cursor==8'h24) &&( Escribir) && (pixelx >= IfechaD) && (pixelx<=DfechaU) && (pixely >= ABfecha + 10'd2) && (pixely<=ABfecha+ 10'd3))begin
+
+          else if ((cursor==8'h24) &&( Escribir) && (pixelx >= IfechaD) && (pixelx<=IfechaD+2*ancho_NumP) && (pixely >= ARfecha+alto_NumP + 10'd2) && (pixely<=ARfecha+alto_NumP+ 10'd3))begin
                color_addr<=4'd2;// Color de lo que se va a imprimir
                graficos<=1'd0;
                dp<=1'd1;end//Tamaño de fuente
-*/
+
 
 
 
@@ -523,14 +523,14 @@ else if ((pixelx >= cronoSegundos ) && (pixelx<cronoSegundos+ancho_NumP) && (pix
                anoo20<=0;
                instr<=0;
                dp<=1'd1;end
-/*
+
 
 //Cursor Mes
-           else if ((cursor==8'h25) &&( Escribir) && (pixelx >= ImesD) && (pixelx<=DmesU) && (pixely >= ABmes + 10'd2) && (pixely<=ABmes + 10'd3))begin
+           else if ((cursor==8'h25) &&( Escribir) && (pixelx >= ImesD) && (pixelx<=ImesD+2*ancho_NumP) && (pixely >= ARfecha+alto_NumP + 10'd2) && (pixely<=ARfecha+alto_NumP + 10'd3))begin
                char_addr <= 7'h0a; //direccion de lo que se va a imprimir
                graficos<=1'd0;
                dp<=1'd1;end
-*/
+
 
 
 //Fondo de Pantalla
@@ -543,7 +543,7 @@ begin
 //Instrucciones
 //..............................................................................
 
-if ((instrucciones) && (pixely >=50) && (pixely<=125) && (50<pixelx) && (pixelx<567) )begin
+if ((instrucciones) && (pixely >=47) && (pixely<=125) && (50<pixelx) && (pixelx<575) )begin
 cuadros<=0;
 numG<=0;
 numP=0;
@@ -573,6 +573,8 @@ else if ((pixely >= 10'd0) && (pixely<=10'd140))begin
 color_addr=4'd0;// Color de lo que se va a imprimir
 graficos<=1'd0;
 dp=1'd1; end
+
+
 //cuadros
 //..............................................................................
 
@@ -675,7 +677,7 @@ always @*
 
 
 if (dias) begin
-contadorx=pixelx[6:0];
+contadorx=pixelx[5:0];
 end
 
 else if (numG)begin
@@ -805,7 +807,7 @@ contadory=pixely-254;//111
 address=pixelx+(contadory*640)+15;//Logica para sacar los datos de la memoria
 end
 else begin
-contadory=pixely+108;//111
+contadory=pixely+108;//108
 address=pixelx+(contadory*640-50);//Logica para sacar los datos de la memoria
 end
 end
