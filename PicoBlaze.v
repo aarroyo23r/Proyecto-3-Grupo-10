@@ -67,6 +67,12 @@ module PicoBlaze(
     reg [10:0] contador=0;
     reg duracionReset=0;
 
+    //Alternar entre lectura y ProgramarCrono
+    reg alterna;
+    reg [7:0] PrEstado;
+    reg [6:0] contador2=0;
+    reg ProgCron=0;
+
 //Memoria de Instrucciones
 
 MemoriaDeInstrucciones MemoriaDeInstrucciones_unit (
@@ -100,26 +106,38 @@ end*/
 
 
 //Mux  y registros de salida
+//==============================================================================
 always @(posedge clk)
-if (write_strobe && port_id==8'h01 )begin
+
+if (ProgCron) begin//Si se activa el estado Programar Cronometro
+teclaOutPort<=teclaOutPort; //No se modifica teclaOutPort
+EstadoPort<=PrEstado; //EstadoPort se le asigna los estados alternados de programar cronometro y lectura
+end
+
+else if (write_strobe && port_id==8'h01 )begin
 teclaOutPort<=out_port;
 EstadoPort<=EstadoPort;
 end
 
 else if (write_strobe && port_id==8'h02 )begin
+
 EstadoPort<=out_port;
 teclaOutPort<=teclaOutPort;
 end
 
-
+//Asignacion normal de las salidas
 else begin
 teclaOutPort<=0;
 EstadoPort<=EstadoPort;
 end
 
 
-//Deco para sumas y restas
 
+
+
+
+//Deco para sumas y restas
+//==============================================================================
 always @*
 if (teclaOutPort==8'h57)begin //Tecla W
 suma=1;
@@ -136,6 +154,7 @@ resta=0;
 end
 
 //Deco Izquierda derecha
+//==============================================================================
 always @*
 if (teclaOutPort==8'h41)begin //Tecla A
 izquierdaReg=1;
@@ -154,6 +173,7 @@ derechaReg=0;
 end
 
 //Reset
+//==============================================================================
 always @(posedge clk)  //Activa el contador para la duracion de la señal
 if (teclaOutPort==8'h08)begin//Tecla r
 duracionReset<=~duracionReset;
@@ -177,6 +197,7 @@ resetOut<=0;
 end
 
 //Activar o desactivar instrucciones
+//==============================================================================
 always @*
 if (teclaOutPort==8'h49)begin//Tecla I
 instruc=~instruc;
@@ -185,6 +206,38 @@ end
 else begin
 instruc=instruc;end
 
+//Duracion de cada estado de ProgramarCrono
+//==============================================================================
+always @(posedge clk)
+if (in_port==8'h50) begin
+ProgCron<=1;    //Control del cambio de estado
+
+if (contador2<74)begin //Duracion 740ns para cada estado
+  alterna<=alterna;
+ contador2<=contador2+1;
+  if (alterna) begin
+    PrEstado<=8'h02; //ProgramarCrono
+    end
+    
+ else begin
+    PrEstado<=8'h00;//Lectura
+    end
+
+end
+
+else begin
+  alterna<=~alterna; //Cambio de estado
+  contador2<=0;       //Reinicio Contador
+  PrEstado<=PrEstado;
+  end
+end
+
+else begin
+ProgCron<=0;    //Control del cambio de estado
+contador2<=0;    //Limpia el contador
+end
+
+//==============================================================================
 //Salidas
 assign sumar=suma;
 assign restar=resta;
