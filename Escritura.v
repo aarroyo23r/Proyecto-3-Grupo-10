@@ -3,6 +3,7 @@ module MaquinaEscritura(
     input wire inicio,reset,crono,escribe,
     input wire clk,IndicadorMaquina,cr_activo,
     input wire suma,resta,izquierda,derecha,
+    input wire control_1,control_2,control_3,
     input wire [7:0]segundos,minutos,horas,date,num_semana,mes,ano,dia_sem,
     input wire [7:0]segundos_cr,minutos_cr,horas_cr,
     output reg [7:0] address,
@@ -31,7 +32,8 @@ localparam [3:0] s0 = 4'h1, //am-pm---24hrs
                  s9 = 4'ha, //segundos cronometro
                  s10 = 4'hb,//minutos cronometro
                  s11 = 4'hc, //horas cronómetro
-                 s12 = 4'hd;
+                 s12 = 4'hd,
+                 s13 = 4'he;
                 
 //Lógica de reset y de estado siguiente-------------------------------------
 always @(posedge clk,posedge reset)begin
@@ -43,6 +45,9 @@ always @(posedge clk,posedge reset)begin
     end
     else if(!crono && cr_activo && s_actual<=4'hd)begin
         s_actual<=s12;
+    end
+    else if(control_1 && control_2 && control_3)begin
+        s_actual<=s13;
     end
     else
         s_actual <=s_next;
@@ -610,6 +615,15 @@ else if(!inicio && !reset && !crono && !escribe && cr_activo)begin
   s_next=4'hZ;  
 end
 
+else if(control_1 && control_2 && control_3)begin
+  address=8'h00;
+  data_activo=8'h00;
+  registro=8'hZZ;
+  suma_reg=0;
+  resta_reg=0;
+  s_next=s_actual;
+
+end
 
 else begin
 registro=0;
@@ -772,6 +786,8 @@ always@*
   data_mod=data_directo;end 
   else if(address==8'h00 && s_actual==s12)begin
   data_mod=data_activo;end  
+  else if(address==8'h00 && s_actual==s13)begin
+  data_mod=data_activo;end
   end
 
 //WIRE fantasma que son leidos por el controlador de la VGA durante la escritura
