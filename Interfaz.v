@@ -237,7 +237,7 @@ ImpresionDatos ImpresionDatos_unit
      .numeroSemanaD(numeroSemanaD),.graficosO(graficos),
      .SegundosUT(SegundosUT),.minutosUT(minutosUT),.horasUT(horasUT),
      .SegundosDT(SegundosDT),.minutosDT(minutosDT),.horasDT(horasDT),.cursor(cursor)
-     ,.Escribir(Escribir),.ProgramarCrono(ProgramarCrono)
+     ,.Escribir(Escribir),.ProgramarCrono(ProgramarCrono),.instrucciones(instrucciones)
     );
 
 

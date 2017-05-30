@@ -79,7 +79,7 @@ TopMaquinas Maquinas_unit(.clk(clk),.data(data),.address(address),.escribe1(escr
                           );
 
 Interfaz Interfaz_unit(.clk(clk),.reset(reset1),.resetSync(reset1),.instrucciones(instrucciones)
-                       ,.ProgramarCrono(crono1),.ring(ring),.cursor(DATA_ADDRESS),.rgbO(rgbO)
+                       ,.ProgramarCrono(crono1),.ring(ring),.cursor(address),.rgbO(rgbO)
                        ,.hsync(hsync),.vsync(vsync),.video_on(video_on)
                        ,.datos0(Segundos),.datos1(minutos),.datos2(horas),.datos3(fecha),.datos4(mes),.datos5(ano)
                        ,.datos6(diaSemana),.datos7(numeroSemana),.datos8(SegundosT),.datos9(minutosT),.datos10(horasT)
@@ -90,6 +90,7 @@ Interfaz Interfaz_unit(.clk(clk),.reset(reset1),.resetSync(reset1),.instruccione
 //==============================================================================
 
 always @*
+
 if (escribeC) begin
 Segundos=segundosSal;
 minutos=minutosSal;
