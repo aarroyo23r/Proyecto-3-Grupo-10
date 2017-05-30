@@ -11,13 +11,13 @@ module TopMaquinas(
     output wire [7:0] data_vga,
     output wire inicio1,
     output wire ring,
-    output wire ChipSelect,Read,Write,AoD //Señales de entrada del RTC
-    output reg escribe,crono,cr_activo;//Señales que controlan las maquinas de estados correctas
+    output wire ChipSelect,Read,Write,AoD, //Señales de entrada del RTC
+    output reg escribe,crono,cr_activo,//Señales que controlan las maquinas de estados correctas
 
-    output wire[7:0] datos0,datos1,datos2, datos3,datos4, datos5,datos6, datos7,datos8,datos9,datos10; //datos a controlador_vga durante lectura
+    output wire[7:0] datos0,datos1,datos2, datos3,datos4, datos5,datos6, datos7,datos8,datos9,datos10, //datos a controlador_vga durante lectura
 
-    output wire [7:0]segundosSal, minutosSal,horasSal,dateSal,num_semanaSal,mesSal,anoSal,dia_semSal; //datos a controlador_vga durante la escritura
-    output wire [7:0]segundos_crSal,minutos_crSal,horas_crSal;
+    output wire [7:0]segundosSal, minutosSal,horasSal,dateSal,num_semanaSal,mesSal,anoSal,dia_semSal,///datos a controlador_vga durante la escritura
+    output wire [7:0]segundos_crSal,minutos_crSal,horas_crSal
 
     );
 localparam [12:0] limit =16'd1034;
@@ -212,5 +212,5 @@ always @*begin
  end
 end
 
-   assign ring= (control_1 and contador2 and control_3);
+   assign ring= (control_1 && contador2 && control_3);
 endmodule
