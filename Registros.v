@@ -20,25 +20,26 @@ module Registros(
 always@(posedge clk)begin
 
     if(address==8'h22 && !AoD)begin
-    //data_0<=data_vga;
-    data_0<=1;end
-    
+    data_0<=data_vga;
+    //data_0<=1;
+    end
+
     else if(address==8'h23 && !AoD)begin
     data_1<=data_vga;end
-    
+
     else if(address==8'h24 && !AoD)begin
     data_2<=data_vga;end
-    
+
     else if(address==8'h25 && !AoD )begin
     data_3<=data_vga;end
-    
+
     else if(address==8'h26 && !AoD)begin
     data_4<=data_vga;end
-    
+
     else if(address==8'h27 && !AoD)begin
     data_5<=data_vga;
     end
-    
+
     else if(address==8'h28 && !AoD)begin
     data_6<=data_vga;end
 
@@ -49,10 +50,10 @@ always@(posedge clk)begin
     //Cronometro
     else if(address==8'h42 && !AoD)begin
     data_8<=data_vga;end
-    
+
     else if(address==8'h43 && !AoD)begin
     data_9<=data_vga;end
-    
+
     else if(address==8'h21 &&  !AoD)begin
     data_10<=data_vga;end
 
