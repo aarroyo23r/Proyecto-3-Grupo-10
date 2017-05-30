@@ -2,11 +2,12 @@
 `timescale 1ns / 1ps
 
 module TOP(
-    input wire clk,Reset,
+    input wire clk,
     input wire ps2d,
     input wire ps2c,
     input wire MasterReset,//Reset para el picoblaze
-
+    inout wire [7:0] DATA_ADDRESS,
+    output wire ChipSelect,Read,Write,AoD,//Señales de entrada del RTC
     output wire [11:0] rgbO,//Salida RGB
     output wire hsync,vsync
     );
@@ -22,9 +23,9 @@ wire izquierda,derecha;
 
 
 wire [7:0] ascii_code;
-wire ChipSelect,Read,Write,AoD; //Señales de entrada del RTC
+
 wire [7:0]address,data;
-wire [7:0] DATA_ADDRESS;
+
 
 
 wire ring;
@@ -63,7 +64,7 @@ PicoBlaze Picoblaze_unit(.clk(clk),.reset(MasterReset),.inicio(inicio),.in_port(
                          .izquierda(izquierda),.derecha(derecha),.resetO(reset1),.instrucciones(instrucciones)
                          );
 
-TopTeclado teclado_unit(.clk(clk), .ps2d(ps2d),.ps2c(ps2c),.Reset(Reset),.ascii_code(ascii_code),.DoRead(DoRead),.interrupt(interrupt));
+TopTeclado teclado_unit(.clk(clk), .ps2d(ps2d),.ps2c(ps2c),.Reset(reset1),.ascii_code(ascii_code),.DoRead(DoRead),.interrupt(interrupt));
 
 TopMaquinas Maquinas_unit(.clk(clk),.data(data),.address(address),.escribe1(escribe1),.crono1(crono1),.reset1(reset1),.cr_activo1(cr_activo),.push_arriba(sumar),.push_abajo(restar),
                           .push_izquierda(izquierda),.push_derecha(derecha),.DATA_ADDRESS(DATA_ADDRESS),.data_mod(),.data_vga(),.inicio1(inicio1),.ChipSelect(ChipSelect),.Read(Read),
