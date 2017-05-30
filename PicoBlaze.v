@@ -212,13 +212,13 @@ always @(posedge clk)
 if (in_port==8'h50) begin
 ProgCron<=1;    //Control del cambio de estado
 
-if (contador2<74)begin //Duracion 740ns para cada estado
+if (contador2<73)begin //Duracion 740ns para cada estado
   alterna<=alterna;
  contador2<=contador2+1;
   if (alterna) begin
     PrEstado<=8'h02; //ProgramarCrono
     end
-    
+
  else begin
     PrEstado<=8'h00;//Lectura
     end
