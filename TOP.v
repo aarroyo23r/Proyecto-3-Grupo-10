@@ -7,13 +7,13 @@ module TOP(
     input wire ps2c,
     input wire MasterReset,//Reset para el picoblaze
 
-    output wire [11:0] rgbO//Salida RGB
-    output wire hsync,vsync;
+    output wire [11:0] rgbO,//Salida RGB
+    output wire hsync,vsync
     );
 wire DoRead;
 wire interrupt;
 wire [7:0] EstadoPort;
-wire escribe1,crono,cr_activo;
+wire escribe1,crono1,cr_activo;
 wire sumar,restar;
 
 wire inicio1;
@@ -24,7 +24,7 @@ wire izquierda,derecha;
 wire [7:0] ascii_code;
 wire ChipSelect,Read,Write,AoD; //Señales de entrada del RTC
 wire [7:0]address,data;
-wire [7:0] DATA_ADDRESS,
+wire [7:0] DATA_ADDRESS;
 
 
 wire ring;
@@ -43,7 +43,7 @@ wire escribeC,cronoC,cr_activoC;//Señales que controlan las maquinas de estados
 //Señales PicoBlaze
 //==============================================================================
 reg inicio=0;
-wire reset1//Reset General
+wire reset1;//Reset General
 
 //Señales Interfaz
 //==============================================================================
@@ -65,7 +65,7 @@ PicoBlaze Picoblaze_unit(.clk(clk),.reset(MasterReset),.inicio(inicio),.in_port(
 
 TopTeclado teclado_unit(.clk(clk), .ps2d(ps2d),.ps2c(ps2c),.Reset(Reset),.ascii_code(ascii_code),.DoRead(DoRead),.interrupt(interrupt));
 
-TopMaquinas Maquinas_unit(.clk(clk),.data(data),.address(address),.escribe1(escribe1),.crono1(crono),.reset1(reset1),.cr_activo1(cr_activo),.push_arriba(sumar),.push_abajo(restar),
+TopMaquinas Maquinas_unit(.clk(clk),.data(data),.address(address),.escribe1(escribe1),.crono1(crono1),.reset1(reset1),.cr_activo1(cr_activo),.push_arriba(sumar),.push_abajo(restar),
                           .push_izquierda(izquierda),.push_derecha(derecha),.DATA_ADDRESS(DATA_ADDRESS),.data_mod(),.data_vga(),.inicio1(inicio1),.ChipSelect(ChipSelect),.Read(Read),
                           .Write(Write),.AoD(AoD),.ring(ring)
                           ,.datos0(datos0),.datos1(datos1),.datos2(datos2),.datos3(datos3),.datos4(datos4),.datos5(datos5)
@@ -77,9 +77,9 @@ TopMaquinas Maquinas_unit(.clk(clk),.data(data),.address(address),.escribe1(escr
                           ,.escribe(escribeC),.crono(cronoC),.cr_activo(cr_activoC)
                           );
 
-Interfaz Interfaz_unit(.clk(clk),.reset(reset1),.resetSync(reset1),.instrucciones(instrucciones),
-                       ,.ProgramarCrono(crono),.ring(ring),.cursor(DATA_ADDRESS),.rgbO(rgbO),
-                       ,.hsync(hsync),.vsync(vsync),.video_on(video_on),
+Interfaz Interfaz_unit(.clk(clk),.reset(reset1),.resetSync(reset1),.instrucciones(instrucciones)
+                       ,.ProgramarCrono(crono1),.ring(ring),.cursor(DATA_ADDRESS),.rgbO(rgbO)
+                       ,.hsync(hsync),.vsync(vsync),.video_on(video_on)
                        ,.datos0(Segundos),.datos1(minutos),.datos2(horas),.datos3(fecha),.datos4(mes),.datos5(ano)
                        ,.datos6(diaSemana),.datos7(numeroSemana),.datos8(SegundosT),.datos9(minutosT),.datos10(horasT)
                        );
