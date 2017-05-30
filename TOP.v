@@ -2,13 +2,13 @@
 `timescale 1ns / 1ps
 
 module TOP(
-    input wire clk,Reset,
+    input wire clk,
     input wire ps2d,
     input wire ps2c,
     input wire MasterReset,//Reset para el picoblaze
 
-    output wire [11:0] rgbO//Salida RGB
-    output wire hsync,vsync;
+    output wire [11:0] rgbO,//Salida RGB
+    output wire hsync,vsync
     );
 wire DoRead;
 wire interrupt;
