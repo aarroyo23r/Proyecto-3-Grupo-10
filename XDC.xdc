@@ -268,16 +268,19 @@ set_property IOSTANDARD LVCMOS33 [get_ports MasterReset]
 
 ##Pmod Header JC
 #Bank = 35, Pin name = IO_L23P_T3_35,						Sch name = JC1
+
 ##Bank = 35, Pin name = IO_L6P_T0_35,						Sch name = JC2
+set_property PACKAGE_PIN E7 [get_ports AoD]
+set_property IOSTANDARD LVCMOS33 [get_ports AoD]
 ##Bank = 35, Pin name = IO_L22P_T3_35,						Sch name = JC3
-set_property PACKAGE_PIN J3 [get_ports video_on]
-set_property IOSTANDARD LVCMOS33 [get_ports video_on]
+set_property PACKAGE_PIN J3 [get_ports Read]
+set_property IOSTANDARD LVCMOS33 [get_ports Read]
 ##Bank = 35, Pin name = IO_L21P_T3_DQS_35,					Sch name = JC4
-#set_property PACKAGE_PIN J4 [get_ports {JC[3]}]
-#set_property IOSTANDARD LVCMOS33 [get_ports {JC[3]}]
+set_property PACKAGE_PIN J4 [get_ports Write]
+set_property IOSTANDARD LVCMOS33 [get_ports Write]
 ##Bank = 35, Pin name = IO_L23N_T3_35,						Sch name = JC7
-#set_property PACKAGE_PIN K1 [get_ports {JC[4]}]
-#set_property IOSTANDARD LVCMOS33 [get_ports {JC[4]}]
+set_property PACKAGE_PIN K1 [get_ports ChipSelect]
+set_property IOSTANDARD LVCMOS33 [get_ports ChipSelect]
 ##Bank = 35, Pin name = IO_L5P_T0_AD13P_35,					Sch name = JC8
 #set_property PACKAGE_PIN E6 [get_ports {JC[5]}]
 #set_property IOSTANDARD LVCMOS33 [get_ports {JC[5]}]
@@ -497,13 +500,13 @@ set_property IOSTANDARD LVCMOS33 [get_ports vsync]
 
 ##USB HID (PS/2)
 ##Bank = 35, Pin name = IO_L13P_T2_MRCC_35,					Sch name = PS2_CLK
-#set_property PACKAGE_PIN F4 [get_ports PS2Clk]
-#set_property IOSTANDARD LVCMOS33 [get_ports PS2Clk]
-#set_property PULLUP true [get_ports PS2Clk]
+set_property PACKAGE_PIN F4 [get_ports ps2c]
+set_property IOSTANDARD LVCMOS33 [get_ports ps2c]
+set_property PULLUP true [get_ports ps2c]
 ##Bank = 35, Pin name = IO_L10N_T1_AD15N_35,					Sch name = PS2_DATA
-#set_property PACKAGE_PIN B2 [get_ports PS2Data]
-#set_property IOSTANDARD LVCMOS33 [get_ports PS2Data]
-#set_property PULLUP true [get_ports PS2Data]
+set_property PACKAGE_PIN B2 [get_ports ps2d]
+set_property IOSTANDARD LVCMOS33 [get_ports ps2d]
+set_property PULLUP true [get_ports ps2d]
 
 
 
@@ -716,3 +719,4 @@ set_property IOSTANDARD LVCMOS33 [get_ports vsync]
 ##Bank = 14, Pin name = IO_L23N_T3_A02_D18_14,				Sch name = CRAM_A22
 #set_property PACKAGE_PIN U13 [get_ports {MemAdr[22]}]
 #set_property IOSTANDARD LVCMOS33 [get_ports {MemAdr[22]}]
+
