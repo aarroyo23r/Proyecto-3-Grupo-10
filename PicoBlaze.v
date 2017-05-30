@@ -66,12 +66,12 @@ module PicoBlaze(
     reg resetOut;
     reg [10:0] contador=0;
     reg duracionReset=0;
-
+/*
     //Alternar entre lectura y ProgramarCrono
     reg alterna;
     reg [7:0] PrEstado;
     reg [6:0] contador2=0;
-    reg ProgCron=0;
+    reg ProgCron=0;*/
 
 //Memoria de Instrucciones
 
@@ -109,12 +109,12 @@ end*/
 //==============================================================================
 always @(posedge clk)
 
-if (ProgCron) begin//Si se activa el estado Programar Cronometro
+/*if (ProgCron) begin//Si se activa el estado Programar Cronometro
 teclaOutPort<=teclaOutPort; //No se modifica teclaOutPort
 EstadoPort<=PrEstado; //EstadoPort se le asigna los estados alternados de programar cronometro y lectura
-end
+end*/
 
-else if (write_strobe && port_id==8'h01 )begin
+if (write_strobe && port_id==8'h01 )begin
 teclaOutPort<=out_port;
 EstadoPort<=EstadoPort;
 end
@@ -205,7 +205,7 @@ end
 
 else begin
 instruc=instruc;end
-
+/*
 //Duracion de cada estado de ProgramarCrono
 //==============================================================================
 always @(posedge clk)
@@ -235,7 +235,7 @@ end
 else begin
 ProgCron<=0;    //Control del cambio de estado
 contador2<=0;    //Limpia el contador
-end
+end*/
 
 //==============================================================================
 //Salidas
