@@ -543,7 +543,7 @@ begin
 //Instrucciones
 //..............................................................................
 
-if ((instrucciones) && (pixely >=49) && (pixely<=125) && (50<pixelx) && (pixelx<575) )begin
+if ((instrucciones) && (pixely >=50) && (pixely<=125) && (50<pixelx) && (pixelx<575) )begin
 cuadros<=0;
 numG<=0;
 numP=0;

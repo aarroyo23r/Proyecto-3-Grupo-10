@@ -10,25 +10,29 @@ module TopMaquinas(
     output wire [7:0]data_mod,
     output wire [7:0] data_vga,
     output wire inicio1,
+    output wire ring,
     output wire ChipSelect,Read,Write,AoD //Señales de entrada del RTC
-    
+    output reg escribe,crono,cr_activo;//Señales que controlan las maquinas de estados correctas
+
+    output wire[7:0] datos0,datos1,datos2, datos3,datos4, datos5,datos6, datos7,datos8,datos9,datos10; //datos a controlador_vga durante lectura
+
+    output wire [7:0]segundosSal, minutosSal,horasSal,dateSal,num_semanaSal,mesSal,anoSal,dia_semSal; //datos a controlador_vga durante la escritura
+    output wire [7:0]segundos_crSal,minutos_crSal,horas_crSal;
+
     );
-localparam [12:0] limit =16'd1034;    
+localparam [12:0] limit =16'd1034;
 wire [7:0] data_inicio;
 wire [7:0] address_inicio;
-wire [7:0] address_lectura,address_escritura; 
+wire [7:0] address_lectura,address_escritura;
 wire [6:0] contador2;
 reg IndicadorMaquina;
-reg reset,escribe,crono,cr_activo;
+reg reset;
 reg inicio=1;
 reg [12:0]contador_inicio=0;
 reg [12:0]contador_reset=0;
 reg control_1=0,control_2=0,control_3=0;
 
-wire[7:0] datos0,datos1,datos2, datos3,datos4, datos5,datos6, datos7,datos8,datos9,datos10; //datos a controlador_vga durante lectura
 
- wire [7:0]segundosSal, minutosSal,horasSal,dateSal,num_semanaSal,mesSal,anoSal,dia_semSal; //datos a controlador_vga durante la escritura
- wire [7:0]segundos_crSal,minutos_crSal,horas_crSal;
 
 assign inicio1=inicio;
 
@@ -36,7 +40,7 @@ assign inicio1=inicio;
 
 inicializacion inicio_unit (.clk(clk),.reset(reset),.inicio(inicio),.address(address_inicio),.data_out(data_inicio),.escribe(escribe),.crono(crono));
 
-MaquinaLectura lee_unit (.clk(clk),.reset2(reset),.address(address_lectura),.escribe(escribe),.crono(crono),.inicio(inicio));   
+MaquinaLectura lee_unit (.clk(clk),.reset2(reset),.address(address_lectura),.escribe(escribe),.crono(crono),.inicio(inicio));
 
 GeneradorFunciones generador_unit (.clk(clk),.IndicadorMaquina(IndicadorMaquina),.ChipSelect1(ChipSelect),.Read1(Read),.Write1(Write),.AoD1(AoD),.contador21(contador2));
 
@@ -118,8 +122,8 @@ always @(posedge clk)begin
     else begin
     crono<=crono;
     end
-  end  
-  
+  end
+
 //Lógica para evitar reset en momento incorrecto--------------------------------------------------------------
 always@(posedge clk)begin
     if(reset1 && contador2==7'h4a)begin
@@ -137,7 +141,7 @@ end
 
 //MUX PARA DATOS a Programar--------------------------------------------------------------------------------------------
 always @*begin
-    if(inicio && !escribe && !crono && !reset && !cr_activo)begin   
+    if(inicio && !escribe && !crono && !reset && !cr_activo)begin
     data=data_inicio;end
     else if(reset && !inicio && !escribe && !crono && !cr_activo) begin
     data=data_inicio;end
@@ -155,7 +159,7 @@ end
 //MUX PARA DIRECCIONES----------------------------------------------------------------------------------------
 
 always @*begin
-    if(inicio && !escribe && !crono && !reset && !cr_activo)begin   
+    if(inicio && !escribe && !crono && !reset && !cr_activo)begin
     address=address_inicio;
     end
     else if(reset && !inicio && !escribe && !crono && !cr_activo) begin
@@ -182,7 +186,7 @@ always@(posedge clk)begin
    end
    else begin
    inicio<=0;end
-      
+
    end
 
 //LOGICA COMBINACIONAL PARA GENERADOR DE FUNCIONES (INDICADORMaquina)--------------------------------------------
@@ -208,5 +212,5 @@ always @*begin
  end
 end
 
-   
+   assign ring= (control_1 and contador2 and control_3);
 endmodule
