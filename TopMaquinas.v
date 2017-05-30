@@ -4,7 +4,7 @@ module TopMaquinas(
     input wire clk,
     output reg [7:0] data,
     output reg [7:0] address,
-    input wire escribe1,crono,reset1,cr_activo,
+    input wire escribe1,crono1,reset1,cr_activo1,
     input wire push_arriba,push_abajo,push_izquierda,push_derecha,
     inout wire [7:0] DATA_ADDRESS,
     output wire [7:0]data_mod,
@@ -18,7 +18,7 @@ wire [7:0] address_inicio;
 wire [7:0] address_lectura,address_escritura; 
 wire [6:0] contador2;
 reg IndicadorMaquina;
-reg reset,escribe;
+reg reset,escribe,crono,cr_activo;
 reg inicio=1;
 reg [12:0]contador_inicio=0;
 reg [12:0]contador_reset=0;
@@ -50,19 +50,48 @@ MaquinaEscritura Escritura_unit(.clk(clk),.inicio(inicio),.reset(reset),.crono(c
 Registros Reg_unit(.clk(clk),.AoD(AoD),.data_vga(data_vga),.address(address),.data_0(datos0),.data_1(datos1),.data_2(datos2),.data_3(datos3),.data_4(datos4),
                                 .data_5(datos5),.data_6(datos6),.data_7(datos7),.data_8(datos8),.data_9(datos9),.data_10(datos10));
 
+
+
+//Lógica para evitar activación del cronometro en momento incorrecto------------------------------------------
+always@(posedge clk)begin
+    if(cr_activo1 && contador2==7'h4a)begin
+    cr_activo<=1;
+    end
+    else if(!cr_activo1 && contador2==7'h4a)begin
+    cr_activo<=0;
+    end
+    else begin
+    cr_activo<=cr_activo;
+    end
+end
+
+
 //Lógica para evitar escritura en momento incorrecto----------------------------------------------------------
 always@(posedge clk)begin
     if(escribe1 && contador2==7'h4a)begin
     escribe<=1;
     end
     else if(!escribe1 && contador2==7'h4a)begin
-    escribe=0;
+    escribe<=0;
     end
     else begin
     escribe<=escribe;
     end
 end
 
+//Lógica para evitar Programar crono en momento incorrecto---------------------------------------------------
+always @(posedge clk)begin
+    if(crono1 && contador2==7'h4a)begin
+    crono<=1;
+    end
+    else if(!crono1 && contador2==7'h4a)begin
+    crono<=0;
+    end
+    else begin
+    crono<=crono;
+    end
+  end  
+  
 //Lógica para evitar reset en momento incorrecto--------------------------------------------------------------
 always@(posedge clk)begin
     if(reset1 && contador2==7'h4a)begin

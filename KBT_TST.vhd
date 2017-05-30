@@ -51,16 +51,10 @@ end record;
 type Codes_Table_t is array (natural range <>) of Code_r;
 ---Aqui definimos los valores en hexadecimal a enviar. Pongan los de los numeros dentro de esta tabla
 constant Codes_Table : Codes_Table_t -- if you need more codes: just add them!
-:= ( (x"4B",'0'), (x"F0",'0'), (x"4B",'0'), (x"24",'0'),
-(x"F0",'0'), (x"24",'0'), (x"4B",'0'), (x"F0",'0'),
-(x"4B",'0'), (x"4D",'0'), (x"F0",'0'),
-(x"4D",'0'), (x"21",'0'), (x"F0",'0'),
-(x"21",'0')
-, (x"57",'0'), (x"F0",'0'),
-(x"57",'0'), (x"53",'0'), (x"F0",'0'),
-(x"53",'0'), (x"41",'0'), (x"F0",'0'),
-(x"41",'0'), (x"44",'0'), (x"F0",'0'),
-(x"44",'0'));
+:= ( (x"21",'0'), (x"F0",'0'),
+(x"21",'0'), (x"1D",'0'), (x"F0",'0'),
+(x"1D",'0'), (x"23",'0'), (x"F0",'0'),
+(x"23",'0'));
 -- in Verilog, the function below is just : ^V ;-)
 function Even (V : std_logic_vector) return std_logic is
 variable p : std_logic := '0';

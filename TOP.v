@@ -38,7 +38,7 @@ PicoBlaze Picoblaze_unit(.clk(clk),.reset(reset),.inicio(inicio),.in_port(ascii_
 
 TopTeclado teclado_unit(.clk(clk), .ps2d(ps2d),.ps2c(ps2c),.Reset(Reset),.ascii_code(ascii_code),.DoRead(DoRead),.interrupt(interrupt));
 
-TopMaquinas Maquinas_unit(.clk(clk),.data(data),.address(address),.escribe1(escribe1),.crono(crono),.reset1(reset1),.cr_activo(cr_activo),.push_arriba(sumar),.push_abajo(restar),
+TopMaquinas Maquinas_unit(.clk(clk),.data(data),.address(address),.escribe1(escribe1),.crono1(crono),.reset1(reset1),.cr_activo1(cr_activo),.push_arriba(sumar),.push_abajo(restar),
                           .push_izquierda(izquierda),.push_derecha(derecha),.DATA_ADDRESS(DATA_ADDRESS),.data_mod(),.data_vga(),.inicio1(inicio1),.ChipSelect(ChipSelect),.Read(Read),
                           .Write(Write),.AoD(AoD));
 
