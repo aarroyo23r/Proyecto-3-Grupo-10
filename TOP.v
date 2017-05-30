@@ -44,7 +44,7 @@ wire escribeC,cronoC,cr_activoC;//Señales que controlan las maquinas de estados
 //Señales PicoBlaze
 //==============================================================================
 reg inicio=0;
-wire reset1;//Reset General
+wire reset1=0;//Reset General
 
 //Señales Interfaz
 //==============================================================================
@@ -79,8 +79,8 @@ TopMaquinas Maquinas_unit(.clk(clk),.data(data),.address(address),.escribe1(escr
                           );
 
 Interfaz Interfaz_unit(.clk(clk),.reset(reset1),.resetSync(reset1),.instrucciones(instrucciones)
-                       ,.ProgramarCrono(crono1),.ring(ring),.cursor(address),.rgbO(rgbO)
-                       ,.hsync(hsync),.vsync(vsync),.video_on(video_on)
+                       ,.ProgramarCrono(cronoC),.ring(ring),.cursor(address),.rgbO(rgbO)
+                       ,.hsync(hsync),.vsync(vsync),.video_on(video_on),.Escribir(escribeC)
                        ,.datos0(Segundos),.datos1(minutos),.datos2(horas),.datos3(fecha),.datos4(mes),.datos5(ano)
                        ,.datos6(diaSemana),.datos7(numeroSemana),.datos8(SegundosT),.datos9(minutosT),.datos10(horasT)
                        );

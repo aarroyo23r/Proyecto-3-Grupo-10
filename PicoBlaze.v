@@ -138,38 +138,38 @@ end
 
 //Deco para sumas y restas
 //==============================================================================
-always @*
+always @(posedge clk)
 if (teclaOutPort==8'h57)begin //Tecla W
-suma=1;
-resta=0;
+suma<=1;
+resta<=0;
 end
 else if (teclaOutPort==8'h53)begin//Tecla S
-suma=0;
-resta=1;
+suma<=0;
+resta<=1;
 end
 
 else begin
-suma=0;
-resta=0;
+suma<=0;
+resta<=0;
 end
 
 //Deco Izquierda derecha
 //==============================================================================
-always @*
+always @(posedge clk)
 if (teclaOutPort==8'h41)begin //Tecla A
-izquierdaReg=1;
-derechaReg=0;
+izquierdaReg<=1;
+derechaReg<=0;
 
 end
 else if (teclaOutPort==8'h44)begin//Tecla D
-izquierdaReg=0;
-derechaReg=1;
+izquierdaReg<=0;
+derechaReg<=1;
 end
 
 
 else begin
-izquierdaReg=0;
-derechaReg=0;
+izquierdaReg<=0;
+derechaReg<=0;
 end
 
 //Reset
@@ -198,13 +198,13 @@ end
 
 //Activar o desactivar instrucciones
 //==============================================================================
-always @*
+always @(posedge clk)
 if (teclaOutPort==8'h49)begin//Tecla I
-instruc=~instruc;
+instruc<=~instruc;
 end
 
 else begin
-instruc=instruc;end
+instruc<=instruc;end
 /*
 //Duracion de cada estado de ProgramarCrono
 //==============================================================================

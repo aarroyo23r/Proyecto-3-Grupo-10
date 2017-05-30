@@ -4,7 +4,7 @@
 // This file contains confidential and proprietary information of Xilinx, Inc. and is
 // protected under U.S. and international copyright and other intellectual property laws.
 ///////////////////////////////////////////////////////////////////////////////////////////
-//       
+//
 // Disclaimer:
 // This disclaimer is not a license and does not grant any rights to the materials
 // distributed herewith. Except as otherwise provided in a valid license issued to
@@ -80,7 +80,7 @@ assign enable_b = 1'b0;
 assign we_b = 4'h0;
 assign clk_b = 1'b0;
 //
-// 
+//
 RAMB18E1 # ( .READ_WIDTH_A              (18),
              .WRITE_WIDTH_A             (18),
              .DOA_REG                   (0),
@@ -176,9 +176,9 @@ RAMB18E1 # ( .READ_WIDTH_A              (18),
              .ENARDEN                   (enable),
              .CLKARDCLK                 (clk),
              .DOADO                     (data_out_a[15:0]),
-             .DOPADOP                   (data_out_a[17:16]), 
+             .DOPADOP                   (data_out_a[17:16]),
              .DIADI                     (data_in_a[15:0]),
-             .DIPADIP                   (data_in_a[17:16]), 
+             .DIPADIP                   (data_in_a[17:16]),
              .WEA                       (2'b00),
              .REGCEAREGCE               (1'b0),
              .RSTRAMARSTRAM             (1'b0),
@@ -187,9 +187,9 @@ RAMB18E1 # ( .READ_WIDTH_A              (18),
              .ENBWREN                   (enable_b),
              .CLKBWRCLK                 (clk_b),
              .DOBDO                     (data_out_b[15:0]),
-             .DOPBDOP                   (data_out_b[17:16]), 
+             .DOPBDOP                   (data_out_b[17:16]),
              .DIBDI                     (data_in_b[15:0]),
-             .DIPBDIP                   (data_in_b[17:16]), 
+             .DIPBDIP                   (data_in_b[17:16]),
              .WEBWE                     (we_b),
              .REGCEB                    (1'b0),
              .RSTRAMB                   (1'b0),

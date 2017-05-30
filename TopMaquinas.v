@@ -26,7 +26,7 @@ wire [7:0] address_inicio;
 wire [7:0] address_lectura,address_escritura;
 wire [6:0] contador2;
 reg IndicadorMaquina;
-reg reset;
+reg reset=0;
 reg inicio=1;
 reg [12:0]contador_inicio=0;
 reg [12:0]contador_reset=0;
