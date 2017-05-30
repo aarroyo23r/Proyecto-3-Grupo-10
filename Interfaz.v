@@ -23,14 +23,14 @@
 module Interfaz(
     input wire clk,reset,resetSync,
     input wire instrucciones,ProgramarCrono,ring,//Señales de control
-    input wire [7:0] cursor,//Direccion del cursor
+   // input wire [7:0] cursor,//Direccion del cursor
     input wire Escribir,//Control escritura
     output wire  [11:0] rgbO,//Salida de color
     output wire hsync,vsync,//Sincronizacion de la VGA
-    output wire video_on,
+    output wire video_on
     //Datos  de entrada
-   input wire [7:0] datos0,datos1,datos2,datos3,datos4,datos5,datos6,datos7,datos8,
-   datos9,datos10
+   //input wire [7:0] datos0,datos1,datos2,datos3,datos4,datos5,datos6,datos7,datos8,
+   //datos9,datos10
 
     //output wire [9:0] pixelx, pixely
     //output reg [3:0] contGuardados
@@ -47,7 +47,7 @@ module Interfaz(
 //SincronizadorVGA
 wire [9:0] pixelx, pixely;
 //wire video_on;
-/*
+
     wire [7:0] cursor=00;
 
     wire [7:0] datos0=06;
@@ -61,10 +61,10 @@ wire [9:0] pixelx, pixely;
     wire [7:0]datos8=08;
    wire [7:0] datos9=03;
    wire [7:0]datos10=02;
-*/
+
 //Tick antes de refrescar la pantalla
-//reg tick;//Tick para guardar datos mientras se refresca la pantalla, para que al volver a imprimir los datos esten listos para ser leidos
-reg tick=1;
+reg tick;//Tick para guardar datos mientras se refresca la pantalla, para que al volver a imprimir los datos esten listos para ser leidos
+//reg tick=1;
 
 
 
@@ -107,7 +107,7 @@ reg [11:0] rgb;
 //_____________________________________________________________________
 //Cuerpo
 //_____________________________________________________________________
-/*
+
 //Tick antes de refrescar la pantalla
 always @(posedge clk)//Se activa la señal tick cuando la pantalla comienza a refrescarse
 
@@ -119,7 +119,7 @@ else
 begin
   tick=0;
 end
-*/
+
 
 
 
@@ -280,7 +280,7 @@ default: color = 12'h111;
 endcase
 /*
 //Color del ring
-always @(posedge clk) 
+always @(posedge clk)
 
 if (ring && contador<100000000)begin //Duracion 1s cada color
   alternaColor<=alternaColor;
@@ -300,29 +300,28 @@ end
 */
 //Mux Salida color
 
-always @(posedge clk)
+always @*
 
 
 if (graficos)begin
-colorMux<=datoMemoria;
+colorMux=datoMemoria;
 end
 /*
 else if (ring  && (pixely >= 10'd473) && (pixely<= 10'd480) ) begin
 colorMux= colorAlarma; end //Cambio de color
 */
 else begin
-colorMux<=color;
+colorMux=color;
 end
-
 
 //Salida VGA
 
-always @* //operación se realiza con cada pulso de reloj
-    if (video_on==1'd1 && dp==1'd1)  //se encienden los LEDs solo si el bit se encuentra en 1 en memoria
-        rgb=colorMux;
+always @(posedge clk) //operación se realiza con cada pulso de reloj
+    if (video_on && dp)  //se encienden los LEDs solo si el bit se encuentra en 1 en memoria
+        rgb<=colorMux;
 
  else
-    rgb = 12'h032;
+    rgb <= 12'h032;
 
 
 assign rgbO=rgb;

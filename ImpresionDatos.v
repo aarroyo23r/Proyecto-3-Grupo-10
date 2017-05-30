@@ -5,7 +5,7 @@
 module ImpresionDatos
     (
     input wire clk,ProgramarCrono,
-    //input wire instrucciones,
+    input wire instrucciones,
     input wire [6:0] SegundosU,SegundosD,minutosU,minutosD,horasU,horasD,
     fechaU,mesU,anoU,diaSemanaU, numeroSemanaU,fechaD,mesD,anoD,diaSemanaD,
     numeroSemanaD,
@@ -27,7 +27,7 @@ module ImpresionDatos
 
 
 //Definicion de señáles y constantes
-reg instrucciones=1;
+//reg instrucciones=1;
 reg memInt;//Eliminar
 
 reg dp=1'd0;//Indica si hay un dato para imprimir
@@ -84,7 +84,7 @@ localparam IminutosU=10'd324;
 localparam ARminutos=10'd197;
 
 //horas
-localparam IhorasD=10'd58;
+localparam IhorasD=10'd59;//58
 localparam IhorasU=10'd123;
 
 localparam ARhoras=10'd197;
@@ -543,7 +543,7 @@ begin
 //Instrucciones
 //..............................................................................
 
-if ((instrucciones) && (pixely >=47) && (pixely<=125) && (50<pixelx) && (pixelx<575) )begin
+if ((instrucciones) && (pixely >=49) && (pixely<=125) && (50<pixelx) && (pixelx<575) )begin
 cuadros<=0;
 numG<=0;
 numP=0;
