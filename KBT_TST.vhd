@@ -26,7 +26,7 @@ architecture Test of Kbd_tst is
 --- Esto quiere decir que su modulo Verilog debe declararse como module PS2_Ctrl(....)
 Component TOP
 port( clk : in std_logic; -- System Clock
-Reset : in std_logic; -- System Reset
+MasterReset : in std_logic; -- System Reset
 ps2c : in std_logic; -- Keyboard Clock Line
 ps2d : in std_logic); -- Keyboard Data Line
 --DoRead : in std_logic; -- From outside when reading the scan code
@@ -35,7 +35,7 @@ ps2d : in std_logic); -- Keyboard Data Line
 --ascii_code : out std_logic_vector(7 downto 0) ); -- scan code
 end component;
 signal Clk : std_logic := '0';
-signal Reset : std_logic;
+signal MasterReset : std_logic;
 signal Kbd_Clk : std_logic := 'H';
 signal Kbd_Data : std_logic := 'H';
 signal DoRead : std_logic := '0';
@@ -51,9 +51,9 @@ end record;
 type Codes_Table_t is array (natural range <>) of Code_r;
 ---Aqui definimos los valores en hexadecimal a enviar. Pongan los de los numeros dentro de esta tabla
 constant Codes_Table : Codes_Table_t -- if you need more codes: just add them!
-:= ( (x"21",'0'), (x"F0",'0'),
-(x"21",'0'), (x"1D",'0'), (x"F0",'0'),
-(x"1D",'0'), (x"23",'0'), (x"F0",'0'),
+:= ( (x"2D",'0'), (x"F0",'0'),
+(x"2D",'0'), (x"24",'0'), (x"F0",'0'),
+(x"24",'0'), (x"23",'0'), (x"F0",'0'),
 (x"23",'0'));
 -- in Verilog, the function below is just : ^V ;-)
 function Even (V : std_logic_vector) return std_logic is
@@ -79,7 +79,7 @@ begin
 --ak que estariammos alambrando
 UUT: TOP
 port map ( clk => Clk,
-Reset => Reset,
+MasterReset => MasterReset,
 ps2c => Kbd_Clk,
 ps2d => Kbd_Data);
 --DoRead => DoRead);
@@ -88,7 +88,7 @@ ps2d => Kbd_Data);
 --ascii_code => Scan_Code );
 -- System Clock & Reset
 Clk <= not Clk after (Period / 2);
-Reset <= '0';
+MasterReset <= '0';
 -- Keyboard sending Data to the Controller
 Emit: process
 procedure SendCode ( D : std_logic_vector(7 downto 0);

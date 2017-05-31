@@ -134,17 +134,17 @@ horasT=datos10;
 end
 
 else begin
-Segundos=datos10;
-minutos=datos0;
-horas=datos1;
-fecha=datos2;
-mes=datos3;
-ano=datos4;
-diaSemana=datos5;
-numeroSemana=datos6;
-SegundosT=0;
-minutosT=0;
-horasT=0;
+Segundos=datos0;
+minutos=datos1;
+horas=datos2;
+fecha=datos3;
+mes=datos4;
+ano=datos5;
+diaSemana=datos6;
+numeroSemana=datos7;
+SegundosT=datos8;
+minutosT=datos9;
+horasT=datos10;
 end
 
 

@@ -129,7 +129,7 @@ always@(posedge clk)begin
     if(reset1 && contador2==7'h4a)begin
     reset<=1;
     end
-    else if(!reset1 && address==8'h02)begin
+    else if(!reset1 && contador2==7'h4a)begin
     reset<=0;
     end
     else begin

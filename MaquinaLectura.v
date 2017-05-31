@@ -26,7 +26,7 @@ begin
     end
     else
     begin
-    contador<=0;
+    contador<=1;
     c_dir<=0;
 end
 end
