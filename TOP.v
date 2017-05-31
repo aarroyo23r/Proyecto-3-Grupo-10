@@ -56,7 +56,7 @@ reg [7:0] Segundos,minutos,horas,fecha,mes,ano,diaSemana,numeroSemana,SegundosT,
 
 
 assign escribe1 = EstadoPort[0];
-assign crono = EstadoPort[1];
+assign crono1 = EstadoPort[1];
 assign cr_activo = EstadoPort[2];
 
 
@@ -79,11 +79,11 @@ TopMaquinas Maquinas_unit(.clk(clk),.data(data),.address(address),.escribe1(escr
                           );
 
 Interfaz Interfaz_unit(.clk(clk),.reset(reset1),.resetSync(reset1),.instrucciones(instrucciones)
-                       ,.ProgramarCrono(cronoC),.ring(ring),.cursor(address),.rgbO(rgbO)
+                      ,.ProgramarCrono(cronoC),.ring(ring),.cursor(address),.rgbO(rgbO)
                        ,.hsync(hsync),.vsync(vsync),.video_on(video_on),.Escribir(escribeC)
                        ,.datos0(Segundos),.datos1(minutos),.datos2(horas),.datos3(fecha),.datos4(mes),.datos5(ano)
                        ,.datos6(diaSemana),.datos7(numeroSemana),.datos8(SegundosT),.datos9(minutosT),.datos10(horasT)
-                       );
+                      );
 
 
 //Logica para los datos que recibe la Interfaz
@@ -96,10 +96,10 @@ Segundos=segundosSal;
 minutos=minutosSal;
 horas=horasSal;
 fecha=dateSal;
-mes=num_semanaSal;
-ano=mesSal;
-diaSemana=anoSal;
-numeroSemana=dia_semSal;
+mes=mesSal;
+ano=anoSal;
+diaSemana=dia_semSal;
+numeroSemana=num_semanaSal;
 SegundosT=0;
 minutosT=0;
 horasT=0;
@@ -134,17 +134,17 @@ horasT=datos10;
 end
 
 else begin
-Segundos=datos0;
-minutos=datos1;
-horas=datos2;
-fecha=datos3;
-mes=datos4;
-ano=datos5;
-diaSemana=datos6;
-numeroSemana=datos7;
-SegundosT=datos8;
-minutosT=datos9;
-horasT=datos10;
+Segundos=datos1;
+minutos=datos2;
+horas=datos3;
+fecha=datos4;
+mes=datos5;
+ano=datos6;
+diaSemana=datos7;
+numeroSemana=datos8;
+SegundosT=datos9;
+minutosT=datos10;
+horasT=datos0;
 end
 
 
