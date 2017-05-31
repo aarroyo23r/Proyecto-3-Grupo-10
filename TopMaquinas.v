@@ -59,15 +59,15 @@ Registros Reg_unit(.clk(clk),.AoD(AoD),.data_vga(data_vga),.address(address),.da
 
 //Lógica generadora de señal de alarma y Stop de cronómetro
 always @(posedge clk)begin
-   if((address==8'h41 && segundos_crSal==datos8 && !escribe && !crono)  && (datos8 + datos9 + datos10 !=8'h00))begin
+   if((address==8'h41 && segundos_crSal==datos8 && !escribe && !crono)  && (datos8 + datos9 + datos7 !=8'h00))begin
    control_1<=1;
    control_2<=control_2;
    control_3<=control_3;end
-   else if((address==8'h42 && minutos_crSal==datos9 &&!escribe && !crono)  && (datos8 + datos9 + datos10 !=8'h00))begin
+   else if((address==8'h42 && minutos_crSal==datos9 &&!escribe && !crono)  && (datos8 + datos9 + datos7 !=8'h00))begin
    control_2<=1;
    control_1<=control_1;
    control_3<=control_3;end
-   else if((address==8'h43 && horas_crSal==datos10 && !escribe && !crono) && (datos8 + datos9 + datos10 !=8'h00))begin
+   else if((address==8'h43 && horas_crSal==datos10 && !escribe && !crono) && (datos8 + datos9 + datos7 !=8'h00))begin
    control_3<=1;
    control_2<=control_2;
    control_1<=control_1;end
