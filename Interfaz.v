@@ -32,8 +32,6 @@ module Interfaz(
     input wire [7:0] datos0,datos1,datos2,datos3,datos4,datos5,datos6,datos7,datos8,
     datos9,datos10
 
-    //output wire [9:0] pixelx, pixely
-    //output reg [3:0] contGuardados
     );
 
 
@@ -46,26 +44,9 @@ module Interfaz(
 
 //SincronizadorVGA
 wire [9:0] pixelx, pixely;
-//wire video_on;
-/*
-    wire [7:0] cursor=00;
 
-    wire [7:0] datos0=06;
-    wire [7:0]datos1=07;
-    wire [7:0]datos2=23;
-    wire [7:0]datos3=03;
-    wire [7:0]datos4=05;
-    wire [7:0]datos5=04;
-    wire [7:0]datos6=00;
-    wire [7:0]datos7=01;
-    wire [7:0]datos8=08;
-   wire [7:0] datos9=03;
-   wire [7:0]datos10=02;
-*/
 //Tick antes de refrescar la pantalla
 reg tick;//Tick para guardar datos mientras se refresca la pantalla, para que al volver a imprimir los datos esten listos para ser leidos
-//reg tick=1;
-
 
 
 //Datos de entrada
@@ -302,7 +283,7 @@ always @(posedge clk) //operación se realiza con cada pulso de reloj
         rgb<=colorMux;
 
  else
-    rgb <= 12'h032;
+    rgb <= 12'h0f7;
 
 
 assign rgbO=rgb;
