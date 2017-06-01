@@ -27,15 +27,13 @@ module ImpresionDatos
 
 
 //Definicion de señáles y constantes
-//reg instrucciones=1;
 reg memInt;//Eliminar
 
 reg dp=1'd0;//Indica si hay un dato para imprimir
 reg [6:0] char_addr; //  Caracter a imprimir
 reg [2:0] color_addr;//Color de la impresion
 reg [19:0] address;//Direccion de memoria
-//wire [10:0] rom_addr;
-//wire [15:0] rom_addrGraficosO,
+
 
 //Variables para usar la memoria de Graficos
 //==============================================================================
