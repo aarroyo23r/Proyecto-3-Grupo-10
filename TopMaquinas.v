@@ -30,7 +30,7 @@ reg reset=0;
 reg inicio=1;
 reg [12:0]contador_inicio=0;
 reg [12:0]contador_reset=0;
-reg control_1=0,control_2=0,control_3=0;
+
 
 
 
@@ -57,29 +57,18 @@ Registros Reg_unit(.clk(clk),.AoD(AoD),.data_vga(data_vga),.address(address),.da
                                 .data_5(datos5),.data_6(datos6),.data_7(datos7),.data_8(datos8),.data_9(datos9),.data_10(datos10));
 
 
+
 //Lógica generadora de señal de alarma y Stop de cronómetro
 always @(posedge clk)begin
-   if((address==8'h41 && segundos_crSal==datos8 && !escribe && !crono)  && (datos8 + datos9 + datos7 !=8'h00))begin
-   control_1<=1;
-   control_2<=control_2;
-   control_3<=control_3;end
-   else if((address==8'h42 && minutos_crSal==datos9 &&!escribe && !crono)  && (datos8 + datos9 + datos7 !=8'h00))begin
-   control_2<=1;
-   control_1<=control_1;
-   control_3<=control_3;end
-   else if((address==8'h43 && horas_crSal==datos10 && !escribe && !crono) && (datos8 + datos9 + datos7 !=8'h00))begin
-   control_3<=1;
-   control_2<=control_2;
-   control_1<=control_1;end
-   else if(address==8'h01 | (datos8 + datos9 + datos10 ==8'h00))begin
-   control_1<=0;
-   control_2<=0;
-   control_3<=0;
+if (cr_activo)begin
+   if(asegundos_crSal==datos8 && minutos_crSal==datos9 && horas_crSal==datos10 && !escribe && !crono)  && (datos8 + datos9 + datos7 !=8'h00))begin
+   ring<=1;
    end
    else begin
-   control_1<=control_1;
-   control_2<=control_2;
-   control_3<=control_3;
+   ring<=0;end
+
+   else begin
+   ring<=0;
    end
 
 end
@@ -212,5 +201,4 @@ always @*begin
  end
 end
 
-   assign ring= (control_1 && contador2 && control_3);
 endmodule
