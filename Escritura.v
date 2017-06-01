@@ -9,15 +9,19 @@ module MaquinaEscritura(
     output reg [7:0] address,
     output reg [7:0]data_mod,
     output wire [7:0]segundosSal, minutosSal,horasSal,dateSal,num_semanaSal,mesSal,anoSal,dia_semSal,
-    output wire [7:0]segundos_crSal,minutos_crSal,horas_crSal    
+    output wire [7:0]segundos_crSal,minutos_crSal,horas_crSal,
+    output wire [7:0]comp1,comp2
+
     );
- //Variables----------------------------------------------------------------  
+ //Variables----------------------------------------------------------------
 reg [3:0] s_next=4'h1;reg [3:0] s_actual;
-reg suma_reg;reg resta_reg;reg[4:0]registro=0; 
+reg suma_reg;reg resta_reg;reg[4:0]registro=0;
 reg [7:0]segundos_reg,minutos_reg,horas_reg,date_reg,num_semana_reg,mes_reg,ano_reg,dia_sem_reg;
 reg [7:0]segundos_cr_reg,minutos_cr_reg,horas_cr_reg;
 reg [7:0]data_directo=0;
 reg [7:0]data_activo;
+reg [7:0]compara1=0;
+reg [7:0] compara2=0;
 
 //declaración de estados---------------------------------------------------_
 localparam [3:0] s0 = 4'h1, //am-pm---24hrs
@@ -34,7 +38,11 @@ localparam [3:0] s0 = 4'h1, //am-pm---24hrs
                  s11 = 4'hc, //horas cronómetro
                  s12 = 4'hd,
                  s13 = 4'he;
-                
+
+
+
+
+
 //Lógica de reset y de estado siguiente-------------------------------------
 always @(posedge clk,posedge reset)begin
     if(reset)begin
@@ -54,7 +62,7 @@ always @(posedge clk,posedge reset)begin
 end
 
 
-    
+
 
 //Máquina de Estados----------------------------------------------------------
 always@*begin
@@ -85,7 +93,7 @@ case(s_actual)
                 resta_reg=0;
                 s_next=s0;
                 end
-    
+
     else if(!suma && !resta && izquierda && !derecha)begin
                 registro=5'd8;
                 address=8'h28;
@@ -105,8 +113,8 @@ case(s_actual)
                 address=8'hZZ;
                 suma_reg=0;
                 resta_reg=0;
-                s_next=s0;end            
-    
+                s_next=s0;end
+
     end
     s1:begin                                                   //segundos
     if(!suma && !resta && !izquierda && !derecha)begin
@@ -130,7 +138,7 @@ case(s_actual)
                 suma_reg=0;
                 s_next=s1;
                 end
-        
+
     else if(!suma && !resta && izquierda && !derecha)begin
                 registro=5'd1;
                 address=8'h00;
@@ -174,7 +182,7 @@ case(s_actual)
                 suma_reg=0;
                 s_next=s2;
                 end
-            
+
     else if(!suma && !resta && izquierda && !derecha)begin
                 registro=5'd1;
                 address=8'h21;
@@ -218,7 +226,7 @@ case(s_actual)
                 suma_reg=0;
                 s_next=s3;
                 end
-                
+
     else if(!suma && !resta && izquierda && !derecha)begin
                 registro=5'd2;
                 address=8'h22;
@@ -261,7 +269,7 @@ case(s_actual)
                 resta_reg=1;
                 suma_reg=0;
                 s_next=s4;
-                end          
+                end
    else if(!suma && !resta && izquierda && !derecha)begin
                 registro=5'd3;
                 address=8'h23;
@@ -305,7 +313,7 @@ case(s_actual)
                 suma_reg=0;
                 s_next=s5;
                 end
-                    
+
     else if(!suma && !resta && izquierda && !derecha)begin
                 registro=5'd4;
                 address=8'h24;
@@ -348,7 +356,7 @@ case(s_actual)
                 resta_reg=1;
                 suma_reg=0;
                 s_next=s6;
-                end    
+                end
    else if(!suma && !resta && izquierda && !derecha)begin
                 registro=5'd5;
                 address=8'h25;
@@ -391,7 +399,7 @@ case(s_actual)
                 resta_reg=1;
                 suma_reg=0;
                 s_next=s7;
-                end                    
+                end
       else if(!suma && !resta && izquierda && !derecha)begin
                 registro=5'd6;
                 address=8'h26;
@@ -434,7 +442,7 @@ case(s_actual)
                 resta_reg=1;
                 suma_reg=0;
                 s_next=s8;
-                end                    
+                end
       else if(!suma && !resta && izquierda && !derecha)begin
                 registro=5'd7;
                 address=8'h27;
@@ -457,16 +465,16 @@ case(s_actual)
                 s_next=s8;end
       end
       default:begin
-                registro=8'hZZ;
+                registro=8'h21;
                 address=8'hZZ;
                 suma_reg=0;
                 resta_reg=0;
-                s_next=s0;end  
-    
+                s_next=s0;end
+
 endcase
 end
 //Programación del cronómetro-----------------------------------------------------------------------------
-else if(!inicio && !reset && crono && !escribe && !cr_activo)begin              
+else if(!inicio && !reset && crono && !escribe && !cr_activo)begin
     case(s_actual)
       s9:begin                                                  //segundos crono
       if(!suma && !resta && !izquierda && !derecha)begin
@@ -476,20 +484,20 @@ else if(!inicio && !reset && crono && !escribe && !cr_activo)begin
                   resta_reg=0;
                   s_next=s9;
                   end
-      else if(suma && !resta && !izquierda && !derecha)begin  
+      else if(suma && !resta && !izquierda && !derecha)begin
                   registro=5'd9;
                   address=8'h41;
                   suma_reg=1;
                   resta_reg=0;
                   s_next=s9;
                   end
-      else if(!suma && resta && !izquierda && !derecha)begin  
+      else if(!suma && resta && !izquierda && !derecha)begin
                   registro=5'd9;
                   address=8'h41;
                   resta_reg=1;
                   suma_reg=0;
                   s_next=s9;
-                  end                    
+                  end
       else if(!suma && !resta && izquierda && !derecha)begin
                   registro=5'hb;
                   address=8'h43;
@@ -506,10 +514,10 @@ else if(!inicio && !reset && crono && !escribe && !cr_activo)begin
                   end
       else begin
                   registro=8'hZZ;
-                  address=8'hZZ;
+                  address=8'h21;
                   suma_reg=0;
                   resta_reg=0;
-                  s_next=s9;end  
+                  s_next=s9;end
       end
       s10:begin                                             // minutos crono
       if(!suma && !resta && !izquierda && !derecha)begin
@@ -532,7 +540,7 @@ else if(!inicio && !reset && crono && !escribe && !cr_activo)begin
                       resta_reg=1;
                       suma_reg=0;
                       s_next=s10;
-                      end                    
+                      end
             else if(!suma && !resta && izquierda && !derecha)begin
                       registro=5'h9;
                       address=8'h41;
@@ -575,7 +583,7 @@ else if(!inicio && !reset && crono && !escribe && !cr_activo)begin
                       resta_reg=1;
                       suma_reg=0;
                       s_next=s11;
-                      end                    
+                      end
            else if(!suma && !resta && izquierda && !derecha)begin
                       registro=5'ha;
                       address=8'h42;
@@ -599,31 +607,22 @@ else if(!inicio && !reset && crono && !escribe && !cr_activo)begin
        end
        default:begin
                       registro=8'hZZ;
-                      address=8'hZZ;
+                      address=8'h21;
                       suma_reg=0;
                       resta_reg=0;
-                      s_next=s0;end                   
+                      s_next=s0;end
     endcase
 end
 
-else if(!inicio && !reset && !crono && !escribe && cr_activo)begin 
+else if(!inicio && !reset && !crono && !escribe && cr_activo)begin
   address=8'h00;
   data_activo=8'h08;
   registro=8'hZZ;
   suma_reg=0;
   resta_reg=0;
-  s_next=4'hZ;  
+  s_next=4'hZ;
 end
 
-else if(control_1 && control_2 && control_3)begin
-  address=8'h00;
-  data_activo=8'h00;
-  registro=8'hZZ;
-  suma_reg=0;
-  resta_reg=0;
-  s_next=s_actual;
-
-end
 
 else begin
 registro=0;
@@ -633,7 +632,6 @@ resta_reg=0;
 s_next=s0;
 end
 end
-
 
 //LOGICA SUMADOR Y RESTADO-----------------------------------------------------------------------------------
 
@@ -703,76 +701,76 @@ if (registro==5'd1)begin
     end
 //------------------------------------------------------------------------------
         else if(registro==5'd4)begin
-    
+
         if (date_reg<=8'h30)begin
-    
+
               if (date_reg[3:0]==4'h9) begin
                     date_reg<=date_reg+7;
               end
-    
+
               else begin
                     date_reg<=date_reg+1;
                     end
-    
+
         end
-    
+
         else begin
               date_reg<=date_reg;
               end
         end
 //------------------------------------------------------------------------------
             else if(registro==5'd5)begin
-        
+
             if (mes_reg<=8'h11)begin
-        
+
                   if (mes_reg[3:0]==4'h9) begin
                         mes_reg<=mes_reg+7;
                   end
-        
+
                   else begin
                         mes_reg<=mes_reg+1;
                         end
-        
+
             end
-        
+
             else begin
                   mes_reg<=mes_reg;
                   end
             end
 //------------------------------------------------------------------------------
                 else if(registro==5'd6)begin
-            
+
                 if (ano_reg<=8'h98)begin
-            
+
                       if (ano_reg[3:0]==4'h9) begin
                             ano_reg<=ano_reg+7;
                       end
-            
+
                       else begin
                             ano_reg<=ano_reg+1;
                             end
-            
+
                 end
-            
+
                 else begin
                       ano_reg<=ano_reg;
                       end
                 end
 //------------------------------------------------------------------------------
                     else if(registro==5'd7)begin
-                
+
                     if (dia_sem_reg<=8'h6)begin
-                
+
                           if (dia_sem_reg[3:0]==4'h9) begin
                                 dia_sem_reg<=dia_sem_reg+7;
                           end
-                
+
                           else begin
                                 dia_sem_reg<=dia_sem_reg+1;
                                 end
-                
+
                     end
-                
+
                     else begin
                           dia_sem_reg<=dia_sem_reg;
                           end
@@ -820,19 +818,19 @@ if (registro==5'd1)begin
     end
     //------------------------------------------------------------------------------
         else if(registro==5'ha)begin
-    
+
         if (minutos_cr_reg<=8'h58)begin
-    
+
               if (minutos_cr_reg[3:0]==4'h9) begin
                     minutos_cr_reg<=minutos_cr_reg+7;
               end
-    
+
               else begin
                     minutos_cr_reg<=minutos_cr_reg+1;
                     end
-    
+
         end
-    
+
         else begin
               minutos_cr_reg<=minutos_cr_reg;
               end
@@ -860,7 +858,7 @@ if (registro==5'd1)begin
 
 
 end
-    
+
 //Restador
   else if(!suma_reg && resta_reg ) begin
 
@@ -883,7 +881,7 @@ end
 
     end
     end
-    
+
   //------------------------------------------------------------------------------
     else if (registro==5'd2)begin
     if (minutos_reg>8'h00)begin
@@ -1104,7 +1102,18 @@ else if(IndicadorMaquina)begin
   end
 end
 
+//Registros cronometro
 
+always @(posedge clk)
+if (crono)begin
+compara1<=segundos_cr_reg;
+compara2<=minutos_cr_reg;
+end
+
+else begin
+compara1<=compara1;
+compara2<=compara2;
+ end
 
 //LOGICA DE SALIDA DEL DATO MODIFICADO------------------------------------------------------------
 always@*
@@ -1140,9 +1149,9 @@ always@*
   else if(address==8'h43 )begin
   data_mod=horas_cr_reg;end
   else if(address==8'h00 && s_actual<s12)begin
-  data_mod=data_directo;end 
+  data_mod=data_directo;end
   else if(address==8'h00 && s_actual==s12)begin
-  data_mod=data_activo;end  
+  data_mod=data_activo;end
   else if(address==8'h00 && s_actual==s13)begin
   data_mod=data_activo;end
   end
@@ -1160,7 +1169,9 @@ assign segundosSal=segundos_reg,
        segundos_crSal=segundos_cr_reg,
        horas_crSal=horas_cr_reg,
        minutos_crSal=minutos_cr_reg;
-       
+
+
+assign comp1=compara1;
+assign comp2=compara2;
+
 endmodule
-
-
