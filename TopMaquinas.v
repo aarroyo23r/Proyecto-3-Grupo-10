@@ -10,7 +10,7 @@ module TopMaquinas(
     output wire [7:0]data_mod,
     output wire [7:0] data_vga,
     output wire inicio1,
-    output wire ring,
+    output reg ring,
     output wire ChipSelect,Read,Write,AoD, //Señales de entrada del RTC
     output reg escribe,crono,cr_activo,//Señales que controlan las maquinas de estados correctas
 
@@ -30,9 +30,7 @@ reg reset=0;
 reg inicio=1;
 reg [12:0]contador_inicio=0;
 reg [12:0]contador_reset=0;
-
-
-
+wire [7:0]comp1,comp2;
 
 assign inicio1=inicio;
 
@@ -51,27 +49,25 @@ MaquinaEscritura Escritura_unit(.clk(clk),.inicio(inicio),.reset(reset),.crono(c
                                 .izquierda(push_izquierda),.derecha(push_derecha),.address(address_escritura),.segundos(datos0),.minutos(datos1),.horas(datos2),.date(datos3),.num_semana(datos4),.mes(datos5),
                                 .ano(datos6),.dia_sem(datos7),.IndicadorMaquina(IndicadorMaquina),.segundos_cr(datos8),.minutos_cr(datos9),.horas_cr(datos10),.cr_activo(cr_activo),.segundosSal(segundosSal),.minutosSal(minutosSal),
                                 .horasSal(horasSal),.dateSal(dateSal),.num_semanaSal(num_semanaSal),.mesSal(mesSal),.anoSal(anoSal),.dia_semSal(dia_semSal),
-                                .segundos_crSal(segundos_crSal),.minutos_crSal(minutos_crSal),.horas_crSal(horas_crSal),.control_1(control_1),.control_2(control_2),.control_3(control_3));
+                                .segundos_crSal(segundos_crSal),.minutos_crSal(minutos_crSal),.horas_crSal(horas_crSal),.control_1(control_1),.control_2(control_2),.control_3(control_3)
+                                ,.comp1(comp1),.comp2(comp2));
 
 Registros Reg_unit(.clk(clk),.AoD(AoD),.data_vga(data_vga),.address(address),.data_0(datos0),.data_1(datos1),.data_2(datos2),.data_3(datos3),.data_4(datos4),
                                 .data_5(datos5),.data_6(datos6),.data_7(datos7),.data_8(datos8),.data_9(datos9),.data_10(datos10));
 
 
-
-//Lógica generadora de señal de alarma y Stop de cronómetro
-always @(posedge clk)begin
-if (cr_activo)begin
-   if(asegundos_crSal==datos8 && minutos_crSal==datos9 && horas_crSal==datos10 && !escribe && !crono)  && (datos8 + datos9 + datos7 !=8'h00))begin
-   ring<=1;
-   end
-   else begin
-   ring<=0;end
-
-   else begin
-   ring<=0;
-   end
-
-end
+                                //Lógica generadora de señal de alarma y Stop de cronómetro
+                                always @(posedge clk)
+                                if (!crono)begin
+                                   if(comp1==datos9 && comp2==datos10  && !escribe && !crono  && (comp2 + comp1)!=8'h00)begin
+                                        ring<=1;
+                                   end
+                                    else begin
+                                        ring<=ring;end
+                                end
+                                 else begin
+                                    ring<=0;
+                                end
 
 //Lógica para evitar activación del cronometro en momento incorrecto------------------------------------------
 always@(posedge clk)begin
@@ -136,7 +132,7 @@ always @*begin
     data=data_inicio;end
     else if(!reset && !inicio && escribe && !crono && !cr_activo)begin
     data=data_mod;end
-    else if(!reset && !inicio && !escribe && crono && !cr_activo)begin
+    else if(!reset && !inicio && !escribe && crono && !cr_activo && address==8'h00)begin
     data=data_mod;end
     else if(!reset && !inicio && !escribe && !crono && cr_activo)begin
     data=data_mod;
