@@ -26,7 +26,7 @@ wire [7:0] ascii_code;
 
 wire [7:0]address,data;
 
-
+reg [7:0]address1;
 
 wire ring;
 
@@ -67,13 +67,14 @@ PicoBlaze Picoblaze_unit(.clk(clk),.reset(MasterReset),.inicio(inicio),.in_port(
 TopTeclado teclado_unit(.clk(clk), .ps2d(ps2d),.ps2c(ps2c),.Reset(reset1),.ascii_code(ascii_code),.DoRead(DoRead),.interrupt(interrupt));
 
 TopMaquinas Maquinas_unit(.clk(clk),.data(data),.address(address),.escribe1(escribe1),.crono1(crono1),.reset1(reset1),.cr_activo1(cr_activo),.push_arriba(sumar),.push_abajo(restar),
-                          .push_izquierda(izquierda),.push_derecha(derecha),.DATA_ADDRESS(DATA_ADDRESS),.data_mod(),.data_vga(),.inicio1(inicio1),.ChipSelect(ChipSelect),.Read(Read),
+                          .push_izquierda(derecha),.push_derecha(izquierda),.DATA_ADDRESS(DATA_ADDRESS),.data_mod(),.data_vga(),.inicio1(inicio1),.ChipSelect(ChipSelect),.Read(Read),
                           .Write(Write),.AoD(AoD),.ring(ring)
+
                           ,.datos0(datos0),.datos1(datos1),.datos2(datos2),.datos3(datos3),.datos4(datos4),.datos5(datos5)
                           ,.datos6(datos6),.datos7(datos7),.datos8(datos8),.datos9(datos9),.datos10(datos10)
 
                           ,.segundosSal(segundosSal),.minutosSal(minutosSal),.horasSal(horasSal),.dateSal(dateSal),.num_semanaSal(num_semanaSal)
-                          ,.mesSal(mesSal),.anoSal(anoSal),.dia_semSal(dia_semSal)
+                          ,.mesSal(mesSal),.anoSal(anoSal),.dia_semSal(dia_semSal),.segundos_crSal(segundos_crSal), .minutos_crSal(minutos_crSal),.horas_crSal(horas_crSal)
 
                           ,.escribe(escribeC),.crono(cronoC),.cr_activo(cr_activoC)
                           );
@@ -86,6 +87,7 @@ Interfaz Interfaz_unit(.clk(clk),.reset(reset1),.resetSync(reset1),.instruccione
                       );
 
 
+
 //Logica para los datos que recibe la Interfaz
 //==============================================================================
 
@@ -93,7 +95,7 @@ always @*
 
 if (escribeC) begin
 Segundos=segundosSal;
-minutos=minutosSal;
+minutos= minutosSal;
 horas=horasSal;
 fecha=dateSal;
 mes=mesSal;
@@ -106,17 +108,17 @@ horasT=0;
 end
 
 else if (cronoC) begin
-Segundos=datos0;
-minutos=datos1;
-horas=datos2;
-fecha=datos3;
-mes=datos4;
-ano=datos5;
-diaSemana=datos6;
-numeroSemana=datos7;
+Segundos=datos1;
+minutos=datos2;
+horas=datos3;
+fecha=datos4;
+mes=datos5;
+ano=datos6;
+diaSemana=datos7;
+numeroSemana=datos8;
 SegundosT=segundos_crSal;
 minutosT=minutos_crSal;
-horasT=horas_crSal;
+horasT=0;
 end
 
 else if (cr_activoC) begin
@@ -142,9 +144,14 @@ mes=datos5;
 ano=datos6;
 diaSemana=datos7;
 numeroSemana=datos8;
+if (ring)begin
+SegundosT=0;
+minutosT=0;
+horasT=0;end
+else begin
 SegundosT=datos9;
 minutosT=datos10;
-horasT=datos0;
+horasT=0;end
 end
 
 
