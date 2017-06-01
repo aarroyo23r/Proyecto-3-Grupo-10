@@ -634,17 +634,18 @@ s_next=s0;
 end
 end
 
+
 //LOGICA SUMADOR Y RESTADO-----------------------------------------------------------------------------------
 
-always @(posedge clk) begin
+always @(posedge clk)  begin
 //SUMADOR
 if(!IndicadorMaquina)begin
 
 if(suma_reg && !resta_reg) begin
 
-    if (registro==5'd1)begin
+if (registro==5'd1)begin
 
-    if (segundos_reg<=8'h59) begin
+    if (segundos_reg<=8'h58) begin
 
         if (segundos_reg[3:0]==4'h9) begin
             segundos_reg<=segundos_reg+7;
@@ -664,7 +665,7 @@ if(suma_reg && !resta_reg) begin
 //------------------------------------------------------------------------------
     else if (registro==5'd2)begin
 
-    if (minutos_reg<=8'h59) begin
+    if (minutos_reg<=8'h58) begin
 
         if (minutos_reg[3:0]==4'h9) begin
             minutos_reg<=minutos_reg+7;
@@ -684,7 +685,7 @@ if(suma_reg && !resta_reg) begin
 //------------------------------------------------------------------------------
     else if(registro==5'd3)begin
 
-    if (horas_reg<=8'h23)begin
+    if (horas_reg<=8'h22)begin
 
           if (horas_reg[3:0]==4'h9) begin
                 horas_reg<=horas_reg+7;
@@ -700,86 +701,82 @@ if(suma_reg && !resta_reg) begin
           horas_reg<=horas_reg;
           end
     end
-end
 //------------------------------------------------------------------------------
-    else if(registro==5'd4)begin
-
-    if (date_reg<=8'h30)begin
-
-          if (date_reg[3:0]==4'h9) begin
-                date_reg<=date_reg+7;
-          end
-
-          else begin
-                date_reg<=date_reg+1;
-                end
-
-    end
-
-    else begin
-          date_reg<=date_reg;
-          end
-    end
-    end
+        else if(registro==5'd4)begin
+    
+        if (date_reg<=8'h30)begin
+    
+              if (date_reg[3:0]==4'h9) begin
+                    date_reg<=date_reg+7;
+              end
+    
+              else begin
+                    date_reg<=date_reg+1;
+                    end
+    
+        end
+    
+        else begin
+              date_reg<=date_reg;
+              end
+        end
 //------------------------------------------------------------------------------
-    else if(registro==5'd5)begin
-
-    if (mes_reg<=8'h11)begin
-
-          if (mes_reg[3:0]==4'h9) begin
-                mes_reg<=mes_reg+7;
-          end
-
-          else begin
-                mes_reg<=mes_reg+1;
-                end
-
-    end
-
-    else begin
-          mes_reg<=mes_reg;
-          end
-    end
-
-
+            else if(registro==5'd5)begin
+        
+            if (mes_reg<=8'h11)begin
+        
+                  if (mes_reg[3:0]==4'h9) begin
+                        mes_reg<=mes_reg+7;
+                  end
+        
+                  else begin
+                        mes_reg<=mes_reg+1;
+                        end
+        
+            end
+        
+            else begin
+                  mes_reg<=mes_reg;
+                  end
+            end
 //------------------------------------------------------------------------------
-    else if(registro==5'd6)begin
-
-    if (ano_reg<=8'h99)begin
-
-          if (ano_reg[3:0]==4'h9) begin
-                ano_reg<=ano_reg+7;
-          end
-
-          else begin
-                ano_reg<=ano_reg+1;
+                else if(registro==5'd6)begin
+            
+                if (ano_reg<=8'h98)begin
+            
+                      if (ano_reg[3:0]==4'h9) begin
+                            ano_reg<=ano_reg+7;
+                      end
+            
+                      else begin
+                            ano_reg<=ano_reg+1;
+                            end
+            
                 end
-
-    end
-
-    else begin
-          ano_reg<=ano_reg;
-          end
-    end
+            
+                else begin
+                      ano_reg<=ano_reg;
+                      end
+                end
 //------------------------------------------------------------------------------
-    else if(registro==5'd7)begin
-
-    if (dia_sem_reg<=8'h6)begin
-
-          if (dia_sem_reg[3:0]==4'h9) begin
-                dia_sem_reg<=dia_sem_reg+7;
-          end
-
-          else begin
-                dia_sem_reg<=dia_sem_reg+1;
-                end
-
-    end
-
-    else begin
-          dia_sem_reg<=dia_sem_reg;
-          end
-    end
+                    else if(registro==5'd7)begin
+                
+                    if (dia_sem_reg<=8'h6)begin
+                
+                          if (dia_sem_reg[3:0]==4'h9) begin
+                                dia_sem_reg<=dia_sem_reg+7;
+                          end
+                
+                          else begin
+                                dia_sem_reg<=dia_sem_reg+1;
+                                end
+                
+                    end
+                
+                    else begin
+                          dia_sem_reg<=dia_sem_reg;
+                          end
+                    end
 
 //------------------------------------------------------------------------------
     else if(registro==5'd8)begin
@@ -805,7 +802,7 @@ end
 //------------------------------------------------------------------------------
     else if(registro==5'd9)begin
 
-    if (segundos_cr_reg<=8'h59)begin
+    if (segundos_cr_reg<=8'h58)begin
 
           if (segundos_cr_reg[3:0]==4'h9) begin
                 segundos_cr_reg<=segundos_cr_reg+7;
@@ -821,31 +818,30 @@ end
           segundos_cr_reg<=segundos_cr_reg;
           end
     end
-
-//------------------------------------------------------------------------------
-    else if(registro==5'ha)begin
-
-    if (minutos_cr_reg<=8'h59)begin
-
-          if (minutos_cr_reg[3:0]==4'h9) begin
-                minutos_cr_reg<=minutos_cr_reg+7;
-          end
-
-          else begin
-                minutos_cr_reg<=minutos_cr_reg+1;
-                end
-
-    end
-
-    else begin
-          minutos_cr_reg<=minutos_cr_reg;
-          end
-    end
+    //------------------------------------------------------------------------------
+        else if(registro==5'ha)begin
+    
+        if (minutos_cr_reg<=8'h58)begin
+    
+              if (minutos_cr_reg[3:0]==4'h9) begin
+                    minutos_cr_reg<=minutos_cr_reg+7;
+              end
+    
+              else begin
+                    minutos_cr_reg<=minutos_cr_reg+1;
+                    end
+    
+        end
+    
+        else begin
+              minutos_cr_reg<=minutos_cr_reg;
+              end
+        end
 
 //------------------------------------------------------------------------------
     else if(registro==5'hb)begin
 
-    if (horas_cr_reg<=8'h23)begin
+    if (horas_cr_reg<=8'h22)begin
 
           if (horas_cr_reg[3:0]==4'h9) begin
                 horas_cr_reg<=horas_cr_reg+7;
@@ -863,11 +859,12 @@ end
     end
 
 
-//==============================================================================
+end
+    
 //Restador
-    else if(!suma_reg && resta_reg ) begin
+  else if(!suma_reg && resta_reg ) begin
 
-    if (registro==5'd1)begin
+  if (registro==5'd1)begin
 
     if (segundos_reg>8'h00) begin
 
@@ -886,8 +883,8 @@ end
 
     end
     end
-
-//------------------------------------------------------------------------------
+    
+  //------------------------------------------------------------------------------
     else if (registro==5'd2)begin
     if (minutos_reg>8'h00)begin
 
@@ -1075,7 +1072,7 @@ end
 
     end
     end
-
+end
     else begin
     minutos_reg<=minutos_reg;
     segundos_reg<=segundos_reg;
@@ -1092,18 +1089,18 @@ end
 
 end
 
-else begin
-  segundos_reg<=segundos;
-  minutos_reg<=minutos;
-  horas_reg<=horas;
-  date_reg<=date;
-  num_semana_reg<=num_semana;
-  mes_reg<=mes;
-  ano_reg<=ano;
-  dia_sem_reg<=dia_sem;
-  segundos_cr_reg<=segundos_cr;
-  minutos_cr_reg<=minutos_cr;
-  horas_cr_reg<=horas_cr;
+else if(IndicadorMaquina)begin
+  segundos_reg<=minutos;
+  minutos_reg<=horas;
+  horas_reg<=date;
+  date_reg<=num_semana;
+  num_semana_reg<=mes;
+  mes_reg<=ano;
+  ano_reg<=dia_sem;
+  dia_sem_reg<=segundos_cr;
+  segundos_cr_reg<=minutos_cr;
+  minutos_cr_reg<=horas_cr;
+  horas_cr_reg<=segundos;
   end
 end
 
